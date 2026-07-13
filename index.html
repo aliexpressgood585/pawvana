@@ -141,6 +141,14 @@ section.block{padding:5.5rem 0}
 .compare{font-size:.8rem;color:var(--moon-dim);text-decoration:line-through}
 .card-actions{display:flex;gap:.6rem}
 .card-actions .btn{flex:1;padding:.85rem .5rem;font-size:.62rem}
+@media(max-width:640px){
+  .grid{grid-template-columns:repeat(2,1fr);gap:1.8rem .9rem}
+  .card h3{font-size:1.02rem}
+  .card .tag{font-size:.72rem}
+  .card-actions .btn-line{display:none}
+  .no{font-size:.72rem;top:.7rem}
+  .badge{font-size:.5rem;padding:.28rem .6rem;letter-spacing:.18em}
+}
 
 /* ---------- kit feature band ---------- */
 .band{border-block:1px solid var(--line-soft);padding:5.5rem 0;position:relative;overflow:hidden}
@@ -824,7 +832,7 @@ function toast(msg) {
 /* ---------------- ticker + reveal ---------------- */
 document.documentElement.classList.add("js");
 document.getElementById("tickerTrack").innerHTML += document.getElementById("tickerTrack").innerHTML;
-const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }), { threshold: .12 });
+const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }), { threshold: 0, rootMargin: "0px 0px -6% 0px" });
 document.querySelectorAll(".reveal").forEach(el => io.observe(el));
 
 /* ---------------- init ---------------- */
