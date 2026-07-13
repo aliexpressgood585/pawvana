@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<title>PAWVANA — Where wild minds learn to rest</title>
+<meta name="description" content="Anxiety-informed essentials for dogs and cats. Beds that hold, mats that soothe, rituals that quiet restless minds.">
+<meta property="og:title" content="PAWVANA — Where wild minds learn to rest">
+<meta property="og:description" content="A collection of quiet objects for pets who feel a little too much.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400;1,6..96,500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --night:#0F1512;
+  --night-2:#151D18;
+  --night-3:#1B241E;
+  --moon:#F2EDE2;
+  --moon-dim:#B9B5A9;
+  --ember:#E2A65B;
+  --ember-deep:#C98A3F;
+  --fern:#89A791;
+  --line:rgba(242,237,226,.14);
+  --line-soft:rgba(242,237,226,.08);
+  --glow:rgba(226,166,91,.16);
+  --serif:"Bodoni Moda",serif;
+  --sans:"Manrope",system-ui,sans-serif;
+  --arch:999px 999px 20px 20px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+html{background:#0F1512}
+body{font-family:var(--sans);background:#0F1512;background:var(--night);color:#F2EDE2;color:var(--moon);line-height:1.65;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+::selection{background:var(--ember);color:var(--night)}
+img{max-width:100%;display:block}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:2px solid var(--ember);outline-offset:4px;border-radius:4px}
+::-webkit-scrollbar{width:10px}
+::-webkit-scrollbar-track{background:var(--night)}
+::-webkit-scrollbar-thumb{background:var(--night-3);border-radius:99px}
+
+/* film grain */
+body::after{content:"";position:fixed;inset:-50%;pointer-events:none;z-index:999;opacity:.5;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' opacity='0.1' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+/* ---------- utility ---------- */
+.wrap{width:min(1160px,92%);margin-inline:auto}
+.eyebrow{font-size:.68rem;font-weight:700;letter-spacing:.34em;text-transform:uppercase;color:var(--fern)}
+.serif{font-family:var(--serif);font-weight:400;line-height:1.08;letter-spacing:.01em}
+.serif em{font-style:italic;color:var(--ember)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.6rem;font-weight:700;font-size:.74rem;letter-spacing:.22em;text-transform:uppercase;padding:1.05rem 2rem;border-radius:2px;transition:all .25s ease}
+.btn:active{transform:scale(.98)}
+.btn-ember{background:var(--ember);color:var(--night)}
+.btn-ember:hover{background:var(--moon)}
+.btn-line{border:1px solid var(--line);color:var(--moon)}
+.btn-line:hover{background:var(--moon);border-color:var(--moon);color:var(--night)}
+.hairline-top{border-top:1px solid var(--line-soft)}
+
+.bgfix{position:fixed;inset:0;background:#0F1512;z-index:-1;pointer-events:none}
+
+/* reveal on scroll — only active when JS is running */
+.js .reveal{opacity:0;transform:translateY(26px);transition:opacity .8s ease,transform .8s ease}
+.js .reveal.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.js .reveal{opacity:1;transform:none;transition:none}}
+
+/* ---------- announce + header ---------- */
+.announce{text-align:center;font-size:.64rem;font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:var(--moon-dim);padding:.7rem 1rem;border-bottom:1px solid var(--line-soft)}
+.announce b{color:var(--ember);font-weight:700}
+header.site{position:sticky;top:0;z-index:60;background:rgba(15,21,18,.85);backdrop-filter:blur(14px);border-bottom:1px solid var(--line-soft)}
+.nav{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:1.05rem 0}
+.nav-links{display:flex;gap:1.8rem;font-size:.68rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--moon-dim)}
+.nav-links a{transition:color .2s}
+.nav-links a:hover{color:var(--ember)}
+.wordmark{font-family:var(--serif);font-weight:500;font-size:1.3rem;letter-spacing:.42em;text-transform:uppercase;text-align:center;padding-left:.42em}
+.nav-right{display:flex;justify-content:flex-end}
+.cart-btn{display:flex;align-items:center;gap:.6rem;font-size:.68rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--moon);padding:.55rem 0;border-bottom:1px solid transparent;transition:border-color .2s}
+.cart-btn:hover{border-color:var(--ember)}
+.cart-count{font-family:var(--serif);font-style:italic;color:var(--ember);font-size:.95rem}
+@media(max-width:820px){.nav{grid-template-columns:auto 1fr}.nav-links{display:none}.wordmark{text-align:left;padding-left:0;font-size:1.05rem;letter-spacing:.34em}}
+
+/* ---------- hero ---------- */
+.hero{position:relative;padding:7.5rem 0 6rem;text-align:center;overflow:hidden}
+.moon{position:absolute;left:50%;top:-14rem;transform:translateX(-50%);width:min(760px,140vw);aspect-ratio:1;border-radius:50%;pointer-events:none;
+  background:radial-gradient(circle,rgba(226,166,91,.20) 0%,rgba(226,166,91,.07) 38%,transparent 68%)}
+.hero .eyebrow{display:block;margin-bottom:1.6rem}
+.hero h1{font-size:clamp(2.9rem,8.2vw,6.4rem);margin-bottom:1.6rem}
+.hero .lede{max-width:36rem;margin:0 auto 2.6rem;color:var(--moon-dim);font-size:1.02rem;font-weight:500}
+.hero-ctas{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-bottom:3rem}
+.trust{display:flex;justify-content:center;gap:2.4rem;flex-wrap:wrap;font-size:.62rem;font-weight:700;letter-spacing:.26em;text-transform:uppercase;color:var(--moon-dim)}
+@media (prefers-reduced-motion:no-preference){
+  .moon{animation:moonbreath 7s ease-in-out infinite}
+  @keyframes moonbreath{0%,100%{opacity:.85;transform:translateX(-50%) scale(1)}50%{opacity:1;transform:translateX(-50%) scale(1.05)}}
+}
+@media(max-width:700px){.hero{padding:4.6rem 0 3.8rem}}
+
+/* ---------- ticker ---------- */
+.ticker{border-block:1px solid var(--line-soft);overflow:hidden;padding:.85rem 0}
+.ticker-track{display:flex;gap:3.2rem;width:max-content;font-size:.64rem;font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:var(--moon-dim);white-space:nowrap}
+.ticker-track .dot{color:var(--ember)}
+@media (prefers-reduced-motion:no-preference){.ticker-track{animation:tick 30s linear infinite}@keyframes tick{to{transform:translateX(-50%)}}}
+
+/* ---------- sections ---------- */
+section.block{padding:5.5rem 0}
+.section-head{max-width:44rem;margin:0 auto 3.2rem;text-align:center}
+.section-head .eyebrow{display:block;margin-bottom:1.1rem}
+.section-head h2{font-size:clamp(1.9rem,4.4vw,3.1rem)}
+.section-head p{color:var(--moon-dim);margin-top:1rem;font-size:.96rem}
+
+/* ---------- chapter tabs ---------- */
+.chips{display:flex;gap:2.2rem;justify-content:center;flex-wrap:wrap;margin-bottom:3.4rem;border-bottom:1px solid var(--line-soft);padding-bottom:1.1rem}
+.chip{font-size:.68rem;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:var(--moon-dim);padding:.3rem 0;position:relative;transition:color .2s}
+.chip::after{content:"";position:absolute;left:0;right:0;bottom:-1.15rem;height:1px;background:var(--ember);opacity:0;transition:opacity .2s}
+.chip:hover{color:var(--moon)}
+.chip.active{color:var(--ember)}
+.chip.active::after{opacity:1}
+@media(max-width:700px){.chips{gap:1.2rem}}
+
+/* ---------- vitrine grid ---------- */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:2.4rem 1.8rem}
+.card{display:flex;flex-direction:column;position:relative}
+.vitrine{position:relative;aspect-ratio:4/5;border-radius:var(--arch);border:1px solid var(--line);background:linear-gradient(180deg,var(--night-2),var(--night));display:grid;place-items:center;overflow:hidden;margin-bottom:1.3rem;transition:border-color .35s,transform .35s}
+.vitrine::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 34%,var(--glow),transparent 62%);opacity:.7;transition:opacity .35s}
+.vitrine .obj{font-size:3.4rem;filter:drop-shadow(0 14px 28px rgba(0,0,0,.5));transition:transform .35s;z-index:1}
+.vitrine img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.obj.art{width:56%;font-size:0}
+.obj.art svg{width:100%;height:auto;display:block;overflow:visible}
+.modal-img .obj.art{width:48%}
+.line-img .obj.art{width:62%;filter:none}
+.card:hover .vitrine{border-color:rgba(226,166,91,.55);transform:translateY(-6px)}
+.card:hover .vitrine::before{opacity:1}
+.card:hover .vitrine .obj{transform:scale(1.08)}
+.no{position:absolute;top:1rem;left:50%;transform:translateX(-50%);font-family:var(--serif);font-style:italic;font-size:.82rem;color:var(--moon-dim);z-index:2}
+.badge{position:absolute;bottom:.9rem;left:50%;transform:translateX(-50%);font-size:.56rem;font-weight:700;letter-spacing:.26em;text-transform:uppercase;color:var(--ember);border:1px solid rgba(226,166,91,.4);padding:.34rem .8rem;border-radius:99px;background:rgba(15,21,18,.6);backdrop-filter:blur(4px);white-space:nowrap;z-index:2}
+.card h3{font-family:var(--serif);font-weight:500;font-size:1.22rem;text-align:center;line-height:1.25}
+.card .tag{font-size:.78rem;color:var(--moon-dim);text-align:center;margin:.35rem 0 .7rem;flex:1}
+.price-row{display:flex;justify-content:center;align-items:baseline;gap:.7rem;margin-bottom:1rem}
+.price{font-family:var(--serif);font-size:1.15rem;color:var(--ember)}
+.compare{font-size:.8rem;color:var(--moon-dim);text-decoration:line-through}
+.card-actions{display:flex;gap:.6rem}
+.card-actions .btn{flex:1;padding:.85rem .5rem;font-size:.62rem}
+
+/* ---------- kit feature band ---------- */
+.band{border-block:1px solid var(--line-soft);padding:5.5rem 0;position:relative;overflow:hidden}
+.band-glow{position:absolute;right:-12rem;top:50%;transform:translateY(-50%);width:560px;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,rgba(226,166,91,.14),transparent 65%);pointer-events:none}
+.band-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:4rem;align-items:center}
+.band h2{font-size:clamp(2.1rem,4.6vw,3.4rem);margin:1.1rem 0 1.2rem}
+.band p{color:var(--moon-dim);max-width:30rem;margin-bottom:2rem;font-size:.96rem}
+.band .price-row{justify-content:flex-start;margin-bottom:2rem}
+.band .price{font-size:1.7rem}
+.band-visual{position:relative;display:grid;place-items:center}
+.band-arch{width:min(340px,80vw);aspect-ratio:4/5;border-radius:var(--arch);border:1px solid var(--line);background:radial-gradient(circle at 50% 30%,rgba(226,166,91,.22),transparent 65%),linear-gradient(180deg,var(--night-3),var(--night-2));display:grid;place-items:center;font-size:5.5rem}
+.band-arch small{position:absolute;bottom:1.4rem;font-family:var(--serif);font-style:italic;font-size:.9rem;color:var(--moon-dim)}
+@media(max-width:860px){.band-grid{grid-template-columns:1fr;gap:2.6rem}.band .price-row{justify-content:center}.band{text-align:center}.band p{margin-inline:auto}}
+
+/* ---------- philosophy ---------- */
+.philo{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:0}
+.philo article{padding:2.6rem 2.2rem;border-top:1px solid var(--line);position:relative}
+.philo article + article{border-left:1px solid var(--line-soft)}
+.philo .roman{font-family:var(--serif);font-style:italic;font-size:1.05rem;color:var(--ember);display:block;margin-bottom:1.1rem}
+.philo h3{font-family:var(--serif);font-weight:500;font-size:1.35rem;margin-bottom:.7rem}
+.philo p{font-size:.9rem;color:var(--moon-dim)}
+@media(max-width:820px){.philo article + article{border-left:none}}
+
+/* ---------- reviews ---------- */
+.reviews-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:1.6rem}
+.review{border:1px solid var(--line-soft);border-radius:2px;padding:2.2rem;background:linear-gradient(180deg,var(--night-2),transparent)}
+.review .qmark{font-family:var(--serif);font-size:2.6rem;line-height:.6;color:var(--ember);display:block;margin-bottom:1.1rem}
+.review p{font-family:var(--serif);font-style:italic;font-size:1.06rem;line-height:1.5}
+.review .who{margin-top:1.3rem;font-size:.62rem;font-weight:700;letter-spacing:.26em;text-transform:uppercase;color:var(--moon-dim)}
+.review .stars{color:var(--ember);letter-spacing:.2em;font-size:.72rem;margin-top:.5rem}
+
+/* ---------- FAQ ---------- */
+.faq{max-width:46rem;margin-inline:auto}
+details{border-top:1px solid var(--line-soft);padding:1.4rem .2rem}
+details:last-child{border-bottom:1px solid var(--line-soft)}
+summary{font-family:var(--serif);font-weight:500;font-size:1.12rem;cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:1rem}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";font-family:var(--serif);font-size:1.5rem;color:var(--ember);transition:transform .25s;flex-shrink:0}
+details[open] summary::after{transform:rotate(45deg)}
+details p{margin-top:.9rem;color:var(--moon-dim);font-size:.92rem;max-width:38rem}
+
+/* ---------- night letter ---------- */
+.letter{border-block:1px solid var(--line-soft);padding:5rem 0;text-align:center}
+.letter h2{font-size:clamp(1.9rem,4vw,2.8rem);margin-bottom:.8rem}
+.letter p{color:var(--moon-dim);margin-bottom:2rem;font-size:.94rem}
+.email-form{display:flex;gap:0;max-width:30rem;margin-inline:auto;border:1px solid var(--line);border-radius:2px}
+.email-form input{flex:1;padding:1.05rem 1.3rem;background:transparent;border:none;color:var(--moon);font-family:inherit;font-size:.92rem}
+.email-form input::placeholder{color:var(--moon-dim)}
+.email-form input:focus{outline:none}
+.email-form .btn{border-radius:0}
+@media(max-width:560px){.email-form{flex-direction:column}.email-form .btn{padding:1rem}}
+
+/* ---------- footer ---------- */
+footer{padding:4.5rem 0 2.5rem}
+.foot-mark{font-family:var(--serif);font-weight:500;font-size:clamp(2.4rem,9vw,5.5rem);letter-spacing:.34em;text-transform:uppercase;text-align:center;color:var(--night-3);padding-left:.34em;margin-bottom:3rem;user-select:none;
+  background:linear-gradient(180deg,rgba(242,237,226,.22),rgba(242,237,226,.04));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.foot-grid{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:2.4rem;margin-bottom:3rem}
+.foot-grid h4{font-size:.62rem;font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:var(--fern);margin-bottom:1.1rem}
+.foot-grid a,.foot-grid button{display:block;color:var(--moon-dim);font-size:.88rem;margin-bottom:.55rem;text-align:left;transition:color .2s}
+.foot-grid a:hover,.foot-grid button:hover{color:var(--ember)}
+.foot-desc{color:var(--moon-dim);font-size:.88rem;max-width:22rem}
+.foot-note{border-top:1px solid var(--line-soft);padding-top:1.4rem;font-size:.66rem;letter-spacing:.18em;text-transform:uppercase;color:var(--moon-dim);display:flex;justify-content:space-between;flex-wrap:wrap;gap:.6rem}
+@media(max-width:700px){.foot-grid{grid-template-columns:1fr}}
+
+/* ---------- toast ---------- */
+.toast{position:fixed;bottom:1.6rem;left:50%;transform:translateX(-50%) translateY(20px);background:var(--moon);color:var(--night);font-weight:700;font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;padding:.9rem 1.6rem;border-radius:2px;opacity:0;pointer-events:none;transition:all .3s ease;z-index:200}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ---------- overlays ---------- */
+.overlay{position:fixed;inset:0;background:rgba(5,8,6,.72);backdrop-filter:blur(4px);z-index:100;opacity:0;pointer-events:none;transition:opacity .3s}
+.overlay.open{opacity:1;pointer-events:auto}
+.sheet{position:fixed;z-index:110;background:var(--night-2);border:1px solid var(--line-soft);transition:transform .38s cubic-bezier(.32,.72,.35,1)}
+.sheet-cart{right:0;top:0;bottom:0;width:min(440px,100%);transform:translateX(105%);display:flex;flex-direction:column;border-radius:0}
+.sheet-cart.open{transform:translateX(0)}
+@media(max-width:560px){.sheet-cart{left:0;top:auto;width:100%;max-height:90dvh;border-radius:14px 14px 0 0;transform:translateY(105%)}.sheet-cart.open{transform:translateY(0)}}
+.sheet-head{display:flex;justify-content:space-between;align-items:center;padding:1.5rem 1.6rem;border-bottom:1px solid var(--line-soft)}
+.sheet-head h3{font-family:var(--serif);font-weight:500;font-size:1.35rem}
+.x{font-size:1.5rem;color:var(--moon-dim);line-height:1;padding:.2rem .6rem;transition:color .2s}
+.x:hover{color:var(--ember)}
+.sheet-body{flex:1;overflow-y:auto;padding:1.3rem 1.6rem}
+.ship-bar{border:1px solid var(--line-soft);padding:.95rem 1.1rem;margin-bottom:1.2rem;font-size:.72rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--moon-dim)}
+.ship-bar b{color:var(--ember)}
+.ship-track{height:2px;background:var(--night-3);margin-top:.7rem;overflow:hidden}
+.ship-fill{height:100%;background:var(--ember);transition:width .3s}
+.line{display:flex;gap:1rem;padding:1.05rem 0;border-bottom:1px solid var(--line-soft)}
+.line-img{width:60px;height:74px;flex-shrink:0;border-radius:99px 99px 8px 8px;border:1px solid var(--line-soft);background:radial-gradient(circle at 50% 35%,var(--glow),transparent 65%),var(--night-3);display:grid;place-items:center;font-size:1.6rem;overflow:hidden}
+.line-img img{width:100%;height:100%;object-fit:cover}
+.line-info{flex:1}
+.line-info h4{font-family:var(--serif);font-weight:500;font-size:1rem}
+.line-info .opts{font-size:.7rem;letter-spacing:.08em;color:var(--moon-dim);margin-top:.15rem}
+.line-info .lp{font-family:var(--serif);color:var(--ember);font-size:.95rem;margin-top:.3rem}
+.qty{display:flex;align-items:center;gap:.7rem;margin-top:.55rem}
+.qty button{width:26px;height:26px;border:1px solid var(--line);color:var(--moon);font-weight:700;transition:all .2s}
+.qty button:hover{border-color:var(--ember);color:var(--ember)}
+.rm{font-size:.62rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--moon-dim);margin-left:auto;transition:color .2s}
+.rm:hover{color:var(--ember)}
+.empty-cart{text-align:center;padding:3rem 0;color:var(--moon-dim);font-size:.92rem}
+.empty-cart .big{font-family:var(--serif);font-style:italic;font-size:2rem;color:var(--moon);margin-bottom:.6rem}
+.sheet-foot{border-top:1px solid var(--line-soft);padding:1.3rem 1.6rem;background:var(--night)}
+.disc-row{display:flex;gap:0;margin-bottom:1.1rem;border:1px solid var(--line-soft)}
+.disc-row input{flex:1;padding:.75rem 1rem;background:transparent;border:none;color:var(--moon);font-family:inherit;text-transform:uppercase;font-weight:700;letter-spacing:.14em;font-size:.78rem}
+.disc-row input:focus{outline:none}
+.disc-row .btn{border-radius:0;padding:.75rem 1.2rem;font-size:.62rem}
+.totals{font-size:.86rem}
+.totals .row{display:flex;justify-content:space-between;margin-bottom:.4rem;color:var(--moon-dim)}
+.totals .row.grand{font-family:var(--serif);font-size:1.25rem;color:var(--moon);margin:.7rem 0 1.1rem}
+.totals .row.grand span:last-child{color:var(--ember)}
+.totals .row .off{color:var(--ember);font-weight:700}
+#paypal-zone{min-height:52px;background:var(--moon);border-radius:2px;padding:6px}
+#paypal-zone:empty{background:transparent;padding:0}
+.pp-note{font-size:.74rem;color:var(--moon-dim);text-align:center;border:1px dashed var(--line);padding:.9rem;background:transparent!important}
+
+/* product modal */
+.modal{left:50%;top:50%;transform:translate(-50%,-50%) scale(.95);width:min(900px,94%);max-height:90dvh;overflow-y:auto;opacity:0;pointer-events:none}
+.modal.open{transform:translate(-50%,-50%) scale(1);opacity:1;pointer-events:auto}
+.modal-grid{display:grid;grid-template-columns:1fr 1.05fr;gap:2.4rem;padding:2.2rem}
+.modal-img{aspect-ratio:4/5;border-radius:var(--arch);border:1px solid var(--line);background:radial-gradient(circle at 50% 32%,var(--glow),transparent 62%),linear-gradient(180deg,var(--night-3),var(--night-2));display:grid;place-items:center;font-size:6rem;overflow:hidden;position:sticky;top:0}
+.modal-img img{width:100%;height:100%;object-fit:cover}
+.modal-info .no-line{font-family:var(--serif);font-style:italic;color:var(--moon-dim);font-size:.9rem}
+.modal-info h2{font-family:var(--serif);font-weight:500;font-size:2rem;line-height:1.15;margin:.5rem 0 .9rem}
+.modal-info .desc{font-size:.93rem;color:var(--moon-dim);margin:1.3rem 0 1.5rem}
+.opt-group{margin-bottom:1.2rem}
+.opt-group label{display:block;font-size:.62rem;font-weight:700;letter-spacing:.26em;text-transform:uppercase;color:var(--fern);margin-bottom:.5rem}
+.opt-group select{width:100%;padding:.85rem 1rem;border:1px solid var(--line);background:var(--night);color:var(--moon);font-family:inherit;font-size:.9rem;border-radius:2px}
+.modal-cta{margin-top:1.6rem}
+.modal-cta .btn{width:100%}
+.micro{font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:var(--moon-dim);margin-top:1.1rem;text-align:center}
+@media(max-width:740px){.modal-grid{grid-template-columns:1fr;padding:1.4rem}.modal-img{position:static;max-width:300px;margin-inline:auto}}
+
+/* policy modal */
+.policy{width:min(640px,94%);padding:2.4rem}
+.policy h2{font-family:var(--serif);font-weight:500;font-size:1.7rem;margin-bottom:1.2rem}
+.policy p{font-size:.92rem;color:var(--moon-dim);margin-bottom:.9rem}
+</style>
+</head>
+<body style="background-color:#0F1512;color:#F2EDE2">
+<div class="bgfix" aria-hidden="true"></div>
+
+<div class="announce">Free U.S. shipping over $50 · Code <b>WELCOME15</b> — 15% off your first order</div>
+
+<header class="site">
+  <div class="wrap nav">
+    <nav class="nav-links">
+      <a href="#shop">Collection</a>
+      <a href="#kit">The Calm Kit</a>
+      <a href="#philosophy">Philosophy</a>
+    </nav>
+    <a href="#top" class="wordmark">Pawvana</a>
+    <div class="nav-right">
+      <button class="cart-btn" id="openCart" aria-label="Open cart">Cart <span class="cart-count" id="cartCount">0</span></button>
+    </div>
+  </div>
+</header>
+
+<section class="hero" id="top">
+  <div class="moon" aria-hidden="true"></div>
+  <div class="wrap">
+    <span class="eyebrow">Anxiety-informed essentials for dogs &amp; cats</span>
+    <h1 class="serif">Where wild minds<br><em>learn to rest.</em></h1>
+    <p class="lede">A collection of quiet objects — beds that hold, mats that soothe, rituals that turn restless energy into deep, unbothered sleep.</p>
+    <div class="hero-ctas">
+      <a href="#kit" class="btn btn-ember">Discover the Calm Kit</a>
+      <a href="#shop" class="btn btn-line">Browse the collection</a>
+    </div>
+    <div class="trust">
+      <span>30-Day Returns</span>
+      <span>Tracked Worldwide</span>
+      <span>Free U.S. Shipping $50+</span>
+    </div>
+  </div>
+</section>
+
+<div class="ticker" aria-hidden="true">
+  <div class="ticker-track" id="tickerTrack">
+    <span>Calm is a ritual</span><span class="dot">✦</span>
+    <span>Free U.S. shipping over $50</span><span class="dot">✦</span>
+    <span>30-day easy returns</span><span class="dot">✦</span>
+    <span>Code WELCOME15 — 15% off</span><span class="dot">✦</span>
+    <span>Designed for the softest hours</span><span class="dot">✦</span>
+  </div>
+</div>
+
+<section class="block wrap reveal" id="shop">
+  <div class="section-head">
+    <span class="eyebrow">The collection</span>
+    <h2 class="serif">Quiet objects for <em>loud feelings</em></h2>
+    <p>Seven pieces, two kits. Each one solves a single real problem — anxiety, boredom, gulping, shedding — and nothing else.</p>
+  </div>
+  <div class="chips" id="chips">
+    <button class="chip active" data-cat="all">All</button>
+    <button class="chip" data-cat="calm">I — Calm</button>
+    <button class="chip" data-cat="play">II — Play</button>
+    <button class="chip" data-cat="essentials">III — Care</button>
+    <button class="chip" data-cat="bundles">IV — Kits</button>
+  </div>
+  <div class="grid" id="grid"></div>
+</section>
+
+<section class="band reveal" id="kit">
+  <div class="band-glow" aria-hidden="true"></div>
+  <div class="wrap band-grid">
+    <div>
+      <span class="eyebrow">Signature kit</span>
+      <h2 class="serif">The Calm Kit<em>.</em></h2>
+      <p>Our CloudCalm™ donut bed paired with the ZenLick™ soothing duo. The complete wind-down ritual for pets who pace, shake, or can't settle — bundled, and quietly discounted.</p>
+      <div class="price-row">
+        <span class="price">$54.99</span>
+        <span class="compare">$61.98</span>
+      </div>
+      <button class="btn btn-ember" data-add="calm-kit">Add the Calm Kit</button>
+    </div>
+    <div class="band-visual">
+      <div class="band-arch"><span class="obj art" style="width:44%"><svg viewBox="0 0 120 120" fill="none" stroke="#F2EDE2" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M76 26a30 30 0 1 0 0 68a24 24 0 1 1 0-68z"/><path d="M36 44v12M30 50h12" stroke="#E2A65B"/><path d="M44 78v8M40 82h8" stroke="#E2A65B" stroke-width="2"/></svg></span><small>Kit I — Calm</small></div>
+    </div>
+  </div>
+</section>
+
+<section class="block wrap reveal" id="philosophy">
+  <div class="section-head">
+    <span class="eyebrow">Philosophy</span>
+    <h2 class="serif">A tired nose is <em>a quiet mind</em></h2>
+    <p>Dogs and cats are wired to sniff, lick, and hunt. When those instincts have nowhere to go, they become anxiety — or your couch.</p>
+  </div>
+  <div class="philo">
+    <article>
+      <span class="roman">I.</span>
+      <h3>Sniffing tires the mind</h3>
+      <p>Ten minutes of focused foraging works a dog's brain like a one-hour walk works its legs. That is the entire idea behind SniffSafari™.</p>
+    </article>
+    <article>
+      <span class="roman">II.</span>
+      <h3>Licking releases calm</h3>
+      <p>Repetitive licking releases endorphins — nature's own soothing mechanism. ZenLick™ turns stress moments into slow, spa-like rituals.</p>
+    </article>
+    <article>
+      <span class="roman">III.</span>
+      <h3>Hunting builds confidence</h3>
+      <p>Indoor cats still carry wild instincts. HuntMode™ offers a safe outlet to stalk, pounce, and win — every single evening.</p>
+    </article>
+  </div>
+</section>
+
+<section class="block wrap reveal" id="reviews">
+  <div class="section-head">
+    <span class="eyebrow">Happy homes</span>
+    <h2 class="serif">Heard after <em>bedtime</em></h2>
+  </div>
+  <!-- PLACEHOLDER REVIEWS: replace with real customer reviews before launch -->
+  <div class="reviews-grid">
+    <div class="review">
+      <span class="qmark">“</span>
+      <p>My rescue pup used to shake through every storm. Now she walks herself to the CloudCalm bed the moment the sky darkens.</p>
+      <div class="who">Sample review — replace before launch</div>
+      <div class="stars">★★★★★</div>
+    </div>
+    <div class="review">
+      <span class="qmark">“</span>
+      <p>The snuffle mat is the only thing that survives my work-from-home meetings. Twenty minutes of pure, silent focus.</p>
+      <div class="who">Sample review — replace before launch</div>
+      <div class="stars">★★★★★</div>
+    </div>
+    <div class="review">
+      <span class="qmark">“</span>
+      <p>My cat ignores every toy we buy her. HuntMode lasted four minutes before she was obsessed. Four minutes.</p>
+      <div class="who">Sample review — replace before launch</div>
+      <div class="stars">★★★★★</div>
+    </div>
+  </div>
+</section>
+
+<section class="block wrap reveal" id="faq">
+  <div class="section-head">
+    <span class="eyebrow">Good to know</span>
+    <h2 class="serif">Questions, <em>answered</em></h2>
+  </div>
+  <div class="faq">
+    <details>
+      <summary>How long does shipping take?</summary>
+      <p>U.S. orders arrive in 7–12 business days with full tracking, sent to your inbox within 48 hours. International delivery takes 10–15 business days.</p>
+    </details>
+    <details>
+      <summary>What if my pet doesn't love it?</summary>
+      <p>You have 30 days to change your mind. If it isn't the right fit, write to us and we'll arrange a return or refund — no interrogation.</p>
+    </details>
+    <details>
+      <summary>Are the materials pet-safe?</summary>
+      <p>Yes. Mats and feeders are food-grade silicone and PP, beds use pet-safe plush fabrics, and everything is machine-washable or rinse-clean.</p>
+    </details>
+    <details>
+      <summary>Which size bed should I choose?</summary>
+      <p>S fits pets up to 10 lb, M up to 25 lb, L up to 45 lb, XL up to 70 lb. When in doubt, size up — they love room to sprawl.</p>
+    </details>
+  </div>
+</section>
+
+<section class="letter reveal">
+  <div class="wrap">
+    <span class="eyebrow">The Night Letter</span>
+    <h2 class="serif">Rituals, drops, <em>early access</em></h2>
+    <p>One letter a week. Enrichment rituals and subscriber-only offers. Worth opening.</p>
+    <form class="email-form" onsubmit="event.preventDefault();toast('Welcome to the Night Letter');this.reset()">
+      <input type="email" placeholder="your@email.com" required aria-label="Email address">
+      <button class="btn btn-ember" type="submit">Subscribe</button>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-mark" aria-hidden="true">Pawvana</div>
+    <div class="foot-grid">
+      <div>
+        <h4>Pawvana</h4>
+        <p class="foot-desc">Calming and enrichment essentials for pets who feel a little too much. Designed for the softest hours.</p>
+      </div>
+      <div>
+        <h4>Shop</h4>
+        <a href="#shop">The collection</a>
+        <a href="#kit">The Calm Kit</a>
+        <a href="#philosophy">Philosophy</a>
+      </div>
+      <div>
+        <h4>Support</h4>
+        <button onclick="openPolicy('shipping')">Shipping</button>
+        <button onclick="openPolicy('returns')">Returns &amp; refunds</button>
+        <button onclick="openPolicy('privacy')">Privacy</button>
+        <a href="mailto:hello@pawvana.com">hello@pawvana.com</a>
+      </div>
+    </div>
+    <div class="foot-note">
+      <span>© 2026 Pawvana</span>
+      <span>Calm pets · Happy homes</span>
+    </div>
+  </div>
+</footer>
+
+<div class="toast" id="toast"></div>
+<div class="overlay" id="overlay"></div>
+
+<!-- CART -->
+<aside class="sheet sheet-cart" id="cartSheet" aria-label="Shopping cart">
+  <div class="sheet-head">
+    <h3>Your cart</h3>
+    <button class="x" id="closeCart" aria-label="Close cart">×</button>
+  </div>
+  <div class="sheet-body">
+    <div class="ship-bar" id="shipBar"></div>
+    <div id="cartLines"></div>
+  </div>
+  <div class="sheet-foot">
+    <div class="disc-row">
+      <input id="discInput" placeholder="Discount code" aria-label="Discount code">
+      <button class="btn btn-line" onclick="applyDiscount()">Apply</button>
+    </div>
+    <div class="totals" id="totals"></div>
+    <div id="paypal-zone"></div>
+  </div>
+</aside>
+
+<!-- PRODUCT MODAL -->
+<div class="sheet modal" id="productModal" role="dialog" aria-modal="true">
+  <div class="sheet-head">
+    <h3 style="font-family:var(--sans);font-size:.64rem;letter-spacing:.3em;text-transform:uppercase;color:var(--fern)" id="pmCat"></h3>
+    <button class="x" onclick="closeAll()" aria-label="Close">×</button>
+  </div>
+  <div class="modal-grid" id="pmBody"></div>
+</div>
+
+<!-- POLICY MODAL -->
+<div class="sheet modal policy" id="policyModal" role="dialog" aria-modal="true">
+  <div style="display:flex;justify-content:flex-end"><button class="x" onclick="closeAll()" aria-label="Close">×</button></div>
+  <div id="policyBody"></div>
+</div>
+
+<script>
+/* ==============================================================
+   PAWVANA CONFIG — everything you need to edit lives right here
+   ============================================================== */
+const CONFIG = {
+  paypalClientId: "",              // ← paste your PayPal Business Client ID (developer.paypal.com)
+  currency: "USD",
+  freeShipThreshold: 50,
+  flatShipping: 4.95,
+  supportEmail: "hello@pawvana.com",
+  discounts: { WELCOME15: 0.15 }
+};
+
+/* To use real photos: paste supplier image URLs into img below.
+   Leave img:"" to keep the designed vitrine placeholder. */
+const PRODUCTS = [
+  {id:"cloudcalm-bed", no:"Nº 01", cat:"calm", emoji:"🛏️", img:"", badge:"Best Seller",
+   name:"CloudCalm™ Donut Bed", tag:"The bed that hugs back",
+   price:44.99, compare:69.99,
+   options:{Size:["S (up to 10 lb)","M (up to 25 lb)","L (up to 45 lb)","XL (up to 70 lb)"],Color:["Beige","Grey"]},
+   desc:"CloudCalm's raised rim mimics a mother's embrace, activating your pet's natural sense of security. Designed for dogs and cats with separation anxiety, storm stress, or trouble settling at night. Ultra-soft faux fur, machine washable, non-slip base. Watch them melt into it."},
+  {id:"zenlick-mat", no:"Nº 02", cat:"calm", emoji:"🍯", img:"", badge:"",
+   name:"ZenLick™ Soothing Mat Duo", tag:"Turns stress into spa time",
+   price:16.99, compare:24.99,
+   options:null,
+   desc:"Licking releases calming endorphins. Spread peanut butter or yogurt, stick it to any surface, and turn bath time, grooming, and vet visits into slow, spa-like rituals. Food-grade silicone, dishwasher safe."},
+  {id:"sniffsafari-mat", no:"Nº 03", cat:"play", emoji:"🦴", img:"", badge:"Staff Pick",
+   name:"SniffSafari™ Snuffle Mat", tag:"10 min of sniffing = a 1-hour walk",
+   price:27.99, compare:39.99,
+   options:null,
+   desc:"Hide treats in the fleece layers and let their nose do the work. Slows fast eaters, beats boredom, and settles high-energy dogs — especially on the days a long walk isn't happening."},
+  {id:"huntmode-toy", no:"Nº 04", cat:"play", emoji:"🐈", img:"", badge:"",
+   name:"HuntMode™ Interactive Cat Toy", tag:"Wild instincts, safe outlet",
+   price:29.99, compare:44.99,
+   options:null,
+   desc:"Indoor cats still have wild instincts. HuntMode's unpredictable movements trigger your cat's natural hunting drive — pounce, stalk, swat — even when you're not home. USB rechargeable with auto shut-off."},
+  {id:"slowsip-bowl", no:"Nº 05", cat:"play", emoji:"🥣", img:"", badge:"",
+   name:"SlowSip™ Slow Feeder", tag:"Mealtime, 10× slower and safer",
+   price:17.99, compare:25.99,
+   options:{Color:["Sage","Cream","Charcoal"]},
+   desc:"Eating too fast causes bloating, vomiting, and choking. SlowSip's maze design slows mealtime by up to 10×, turning gulping into a healthy, engaging puzzle. Non-slip base, dishwasher safe."},
+  {id:"pureflow-fountain", no:"Nº 06", cat:"essentials", emoji:"💧", img:"", badge:"",
+   name:"PureFlow™ Quiet Fountain", tag:"3× more hydration, zero noise",
+   price:37.99, compare:54.99,
+   options:null,
+   desc:"Cats drink up to 3× more from moving water. PureFlow's triple filtration keeps water fresh and encourages hydration — protecting kidney and urinary health. So quiet you'll forget it's on. 2.5L capacity."},
+  {id:"furaway-roller", no:"Nº 07", cat:"essentials", emoji:"🧹", img:"", badge:"",
+   name:"FurAway™ Hair Remover", tag:"One roll. Zero fur.",
+   price:18.99, compare:27.99,
+   options:null,
+   desc:"No refills, no batteries, no sticky sheets — just roll and empty. Works on sofas, beds, car seats, and that one blanket they've decided is theirs."},
+  {id:"calm-kit", no:"Kit I", cat:"bundles", emoji:"🌙", img:"", badge:"Save $7",
+   name:"The Calm Kit™", tag:"CloudCalm bed + ZenLick duo",
+   price:54.99, compare:61.98,
+   options:{Size:["S (up to 10 lb)","M (up to 25 lb)","L (up to 45 lb)","XL (up to 70 lb)"],Color:["Beige","Grey"]},
+   desc:"Everything an anxious pet needs to feel safe: our best-selling CloudCalm™ donut bed paired with the ZenLick™ soothing duo. The complete wind-down ritual, bundled and quietly discounted."},
+  {id:"boredom-kit", no:"Kit II", cat:"bundles", emoji:"🧩", img:"", badge:"Save $13",
+   name:"Boredom Buster Kit™", tag:"Snuffle mat + feeder + lick mats",
+   price:49.99, compare:62.97,
+   options:{"Feeder color":["Sage","Cream","Charcoal"]},
+   desc:"Rainy day? Long workday? Covered. SniffSafari™ + SlowSip™ + ZenLick™ keep busy minds working, so your sofa stays in one piece."}
+];
+
+/* ---------------- state ---------------- */
+let cart = [];
+let discount = null;
+/* Cart lives in memory. After deploying, persist it by
+   uncommenting the localStorage line marked below. */
+
+const $ = s => document.querySelector(s);
+const money = n => "$" + n.toFixed(2);
+const prod = id => PRODUCTS.find(p => p.id === id);
+
+/* ---------------- line-art illustrations (auto-replaced by supplier photos once img is set) ---------------- */
+const SVGO = '<svg viewBox="0 0 120 120" fill="none" stroke="#F2EDE2" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">';
+const ART = {
+  "cloudcalm-bed": SVGO+'<ellipse cx="60" cy="74" rx="44" ry="20"/><ellipse cx="60" cy="76" rx="26" ry="11" stroke="#E2A65B"/><path d="M22 66c4-12 18-20 38-20s34 8 38 20"/><path d="M78 30h12l-12 12h12" stroke="#E2A65B"/><path d="M96 20h8l-8 8h8" stroke="#E2A65B" stroke-width="2"/></svg>',
+  "zenlick-mat": SVGO+'<rect x="28" y="36" width="64" height="56" rx="14"/><path d="M60 20v8" stroke="#E2A65B"/><circle cx="60" cy="31" r="2.4" fill="#E2A65B" stroke="none"/><circle cx="46" cy="54" r="2.4" fill="#E2A65B" stroke="none"/><circle cx="60" cy="54" r="2.4" fill="#E2A65B" stroke="none"/><circle cx="74" cy="54" r="2.4" fill="#E2A65B" stroke="none"/><circle cx="46" cy="66" r="2.4" fill="#E2A65B" stroke="none"/><circle cx="60" cy="66" r="2.4" fill="#E2A65B" stroke="none"/><circle cx="74" cy="66" r="2.4" fill="#E2A65B" stroke="none"/><circle cx="46" cy="78" r="2.4" fill="#E2A65B" stroke="none"/><circle cx="60" cy="78" r="2.4" fill="#E2A65B" stroke="none"/><circle cx="74" cy="78" r="2.4" fill="#E2A65B" stroke="none"/></svg>',
+  "sniffsafari-mat": SVGO+'<rect x="24" y="40" width="72" height="50" rx="12"/><path d="M32 55q5-8 10 0t10 0t10 0t10 0t8 0"/><path d="M32 68q5-8 10 0t10 0t10 0t10 0t8 0"/><path d="M32 81q5-8 10 0t10 0t10 0t10 0t8 0"/><circle cx="70" cy="62" r="2.6" fill="#E2A65B" stroke="none"/><circle cx="46" cy="75" r="2.6" fill="#E2A65B" stroke="none"/></svg>',
+  "huntmode-toy": SVGO+'<ellipse cx="56" cy="92" rx="20" ry="8"/><path d="M56 88C56 62 78 60 84 40"/><path d="M84 40q-12-12-2-24q12 8 2 24z" stroke="#E2A65B"/><path d="M83 38q-4-10 1-18" stroke="#E2A65B" stroke-width="1.6"/><path d="M96 30a14 14 0 0 1 4 10M100 22a22 22 0 0 1 6 14" stroke-width="1.8"/></svg>',
+  "slowsip-bowl": SVGO+'<circle cx="60" cy="60" r="36"/><path d="M60 60a6 6 0 0 1 12 0a12 12 0 0 1-24 0a18 18 0 0 1 36 0a24 24 0 0 1-48 0" stroke="#E2A65B"/></svg>',
+  "pureflow-fountain": SVGO+'<ellipse cx="60" cy="88" rx="28" ry="9"/><rect x="49" y="50" width="22" height="34" rx="9"/><path d="M60 46q0-14 16-16" stroke="#E2A65B" stroke-width="2" stroke-dasharray="1 6"/><circle cx="78" cy="34" r="2.4" fill="#E2A65B" stroke="none"/><path d="M40 84a34 12 0 0 0 12 4M80 84a34 12 0 0 1-12 4" stroke-width="1.6"/></svg>',
+  "furaway-roller": SVGO+'<rect x="26" y="46" width="46" height="26" rx="13" transform="rotate(-22 49 59)"/><path d="M72 44l20-16"/><path d="M92 28l6-5" stroke="#E2A65B" stroke-width="6"/><path d="M34 84l8-3M46 88l8-3" stroke="#E2A65B" stroke-width="2"/></svg>',
+  "calm-kit": SVGO+'<path d="M76 26a30 30 0 1 0 0 68a24 24 0 1 1 0-68z"/><path d="M36 44v12M30 50h12" stroke="#E2A65B"/><path d="M44 78v8M40 82h8" stroke="#E2A65B" stroke-width="2"/></svg>',
+  "boredom-kit": SVGO+'<path d="M38 42h14a8 8 0 1 1 14 0h14v16a8 8 0 1 0 0 14v16H66a8 8 0 1 0-14 0H38z"/><path d="M88 32l3 7l7 3l-7 3l-3 7l-3-7l-7-3l7-3z" stroke="#E2A65B" stroke-width="2"/></svg>'
+};
+const artOf = p => p.img
+  ? `<img src="${p.img}" alt="${p.name}" loading="lazy">`
+  : (ART[p.id] ? `<span class="obj art">${ART[p.id]}</span>` : `<span class="obj">${p.emoji}</span>`);
+
+/* ---------------- render grid ---------------- */
+function renderGrid(cat = "all") {
+  $("#grid").innerHTML = PRODUCTS
+    .filter(p => cat === "all" || p.cat === cat)
+    .map(p => `
+    <article class="card">
+      <div class="vitrine" onclick="openProduct('${p.id}')" role="button" tabindex="0" aria-label="View ${p.name}"
+           onkeydown="if(event.key==='Enter')openProduct('${p.id}')">
+        <span class="no">${p.no}</span>
+        ${artOf(p)}
+        ${p.badge ? `<span class="badge">${p.badge}</span>` : ""}
+      </div>
+      <h3>${p.name}</h3>
+      <p class="tag">${p.tag}</p>
+      <div class="price-row"><span class="price">${money(p.price)}</span><span class="compare">${money(p.compare)}</span></div>
+      <div class="card-actions">
+        <button class="btn btn-line" onclick="openProduct('${p.id}')">Details</button>
+        <button class="btn btn-ember" data-add="${p.id}">Add</button>
+      </div>
+    </article>`).join("");
+}
+document.getElementById("chips").addEventListener("click", e => {
+  const b = e.target.closest(".chip"); if (!b) return;
+  document.querySelectorAll(".chip").forEach(c => c.classList.remove("active"));
+  b.classList.add("active");
+  renderGrid(b.dataset.cat);
+});
+
+/* ---------------- product modal ---------------- */
+function openProduct(id) {
+  const p = prod(id);
+  $("#pmCat").textContent = {calm:"Chapter I — Calm",play:"Chapter II — Play",essentials:"Chapter III — Care",bundles:"Chapter IV — Kits"}[p.cat];
+  $("#pmBody").innerHTML = `
+    <div class="modal-img">${artOf(p)}</div>
+    <div class="modal-info">
+      <span class="no-line">${p.no}${p.badge ? " — " + p.badge : ""}</span>
+      <h2>${p.name}</h2>
+      <div class="price-row" style="justify-content:flex-start"><span class="price" style="font-size:1.4rem">${money(p.price)}</span><span class="compare">${money(p.compare)}</span></div>
+      <p class="desc">${p.desc}</p>
+      ${p.options ? Object.entries(p.options).map(([k, vals]) => `
+        <div class="opt-group"><label for="opt-${k}">${k}</label>
+        <select id="opt-${k}" data-opt="${k}">${vals.map(v => `<option>${v}</option>`).join("")}</select></div>`).join("") : ""}
+      <div class="modal-cta">
+        <button class="btn btn-ember" onclick="addFromModal('${p.id}')">Add to cart — ${money(p.price)}</button>
+      </div>
+      <p class="micro">30-day returns · Tracked shipping · Free U.S. shipping $50+</p>
+    </div>`;
+  openSheet("#productModal");
+}
+function addFromModal(id) {
+  const opts = {};
+  document.querySelectorAll("#pmBody select").forEach(s => opts[s.dataset.opt] = s.value);
+  addToCart(id, opts);
+  closeAll();
+}
+
+/* ---------------- cart ---------------- */
+function addToCart(id, opts = {}) {
+  const key = id + JSON.stringify(opts);
+  const found = cart.find(l => l.id + JSON.stringify(l.opts) === key);
+  found ? found.qty++ : cart.push({ id, qty: 1, opts });
+  // localStorage.setItem("pawvana-cart", JSON.stringify(cart)); // ← enable after deploy
+  toast("Added to cart");
+  syncCart();
+}
+function changeQty(i, d) {
+  cart[i].qty += d;
+  if (cart[i].qty < 1) cart.splice(i, 1);
+  syncCart();
+}
+function removeLine(i) { cart.splice(i, 1); syncCart(); }
+
+function cartSubtotal() { return cart.reduce((s, l) => s + prod(l.id).price * l.qty, 0); }
+
+function syncCart() {
+  $("#cartCount").textContent = cart.reduce((s, l) => s + l.qty, 0);
+  const sub = cartSubtotal();
+
+  const left = CONFIG.freeShipThreshold - sub;
+  $("#shipBar").innerHTML = left > 0
+    ? `Add <b>${money(left)}</b> for free U.S. shipping
+       <div class="ship-track"><div class="ship-fill" style="width:${Math.min(100, sub / CONFIG.freeShipThreshold * 100)}%"></div></div>`
+    : `<b>Free U.S. shipping</b> unlocked
+       <div class="ship-track"><div class="ship-fill" style="width:100%"></div></div>`;
+
+  $("#cartLines").innerHTML = cart.length ? cart.map((l, i) => {
+    const p = prod(l.id);
+    const optStr = Object.entries(l.opts).map(([k, v]) => `${k}: ${v}`).join(" · ");
+    return `<div class="line">
+      <div class="line-img">${artOf(p)}</div>
+      <div class="line-info">
+        <h4>${p.name}</h4>
+        ${optStr ? `<div class="opts">${optStr}</div>` : ""}
+        <div class="lp">${money(p.price * l.qty)}</div>
+        <div class="qty">
+          <button onclick="changeQty(${i},-1)" aria-label="Decrease">−</button>${l.qty}<button onclick="changeQty(${i},1)" aria-label="Increase">+</button>
+          <button class="rm" onclick="removeLine(${i})">Remove</button>
+        </div>
+      </div>
+    </div>`;
+  }).join("")
+  : `<div class="empty-cart"><div class="big">Empty, for now.</div>Your pet disagrees with this decision.</div>`;
+
+  const disc = discount ? sub * discount.frac : 0;
+  const ship = cart.length === 0 ? 0 : (sub - disc >= CONFIG.freeShipThreshold ? 0 : CONFIG.flatShipping);
+  const total = sub - disc + ship;
+  $("#totals").innerHTML = cart.length ? `
+    <div class="row"><span>Subtotal</span><span>${money(sub)}</span></div>
+    ${discount ? `<div class="row"><span>Code ${discount.code}</span><span class="off">−${money(disc)}</span></div>` : ""}
+    <div class="row"><span>Shipping</span><span>${ship === 0 ? "Free" : money(ship)}</span></div>
+    <div class="row grand"><span>Total</span><span>${money(total)}</span></div>` : "";
+
+  renderPayPal(total);
+}
+
+function applyDiscount() {
+  const code = $("#discInput").value.trim().toUpperCase();
+  if (CONFIG.discounts[code]) { discount = { code, frac: CONFIG.discounts[code] }; toast(`Code ${code} applied`); }
+  else { discount = null; toast("That code isn't valid"); }
+  syncCart();
+}
+
+/* ---------------- PayPal checkout ---------------- */
+let ppLoaded = false;
+function renderPayPal(total) {
+  const zone = $("#paypal-zone");
+  if (!cart.length) { zone.innerHTML = ""; return; }
+  if (!CONFIG.paypalClientId) {
+    zone.innerHTML = `<div class="pp-note">Checkout is almost ready — add your PayPal Client ID in the CONFIG block at the top of this file to accept payments.</div>`;
+    return;
+  }
+  if (!ppLoaded) {
+    ppLoaded = true;
+    const s = document.createElement("script");
+    s.src = `https://www.paypal.com/sdk/js?client-id=${CONFIG.paypalClientId}&currency=${CONFIG.currency}`;
+    s.onload = () => mountPP();
+    document.head.appendChild(s);
+  } else if (window.paypal) mountPP();
+
+  function mountPP() {
+    zone.innerHTML = "";
+    window.paypal.Buttons({
+      style: { color: "gold", shape: "rect", label: "checkout", height: 48 },
+      createOrder: (d, actions) => {
+        const sub = cartSubtotal();
+        const disc = discount ? sub * discount.frac : 0;
+        const ship = (sub - disc >= CONFIG.freeShipThreshold) ? 0 : CONFIG.flatShipping;
+        return actions.order.create({
+          purchase_units: [{
+            description: "Pawvana order",
+            amount: {
+              currency_code: CONFIG.currency,
+              value: (sub - disc + ship).toFixed(2),
+              breakdown: {
+                item_total: { currency_code: CONFIG.currency, value: sub.toFixed(2) },
+                discount:   { currency_code: CONFIG.currency, value: disc.toFixed(2) },
+                shipping:   { currency_code: CONFIG.currency, value: ship.toFixed(2) }
+              }
+            },
+            items: cart.map(l => {
+              const p = prod(l.id);
+              const optStr = Object.values(l.opts).join(" / ").slice(0, 100);
+              return {
+                name: (p.name + (optStr ? " — " + optStr : "")).slice(0, 120),
+                quantity: String(l.qty),
+                unit_amount: { currency_code: CONFIG.currency, value: p.price.toFixed(2) }
+              };
+            })
+          }]
+        });
+      },
+      onApprove: (d, actions) => actions.order.capture().then(det => {
+        cart = []; discount = null; syncCart();
+        $("#cartLines").innerHTML = `<div class="empty-cart"><div class="big">Thank you, ${det.payer.name.given_name}.</div>Order confirmed — tracking arrives by email within 48 hours.</div>`;
+      }),
+      onError: () => toast("Payment didn't go through — try again")
+    }).render("#paypal-zone");
+  }
+}
+
+/* ---------------- sheets & overlay ---------------- */
+function openSheet(sel) { closeAll(); $("#overlay").classList.add("open"); $(sel).classList.add("open"); document.body.style.overflow = "hidden"; }
+function closeAll() { document.querySelectorAll(".sheet.open,.overlay.open").forEach(el => el.classList.remove("open")); document.body.style.overflow = ""; }
+$("#openCart").onclick = () => { syncCart(); openSheet("#cartSheet"); };
+$("#closeCart").onclick = closeAll;
+$("#overlay").onclick = closeAll;
+document.addEventListener("keydown", e => { if (e.key === "Escape") closeAll(); });
+
+document.addEventListener("click", e => {
+  const b = e.target.closest("[data-add]");
+  if (!b) return;
+  const p = prod(b.dataset.add);
+  p.options ? openProduct(p.id) : addToCart(p.id);
+});
+
+/* ---------------- policies ---------------- */
+const POLICIES = {
+  shipping: `<h2>Shipping policy</h2>
+    <p>Orders are processed within 1–2 business days. U.S. delivery takes 7–12 business days; international delivery 10–15 business days. Every order ships with full tracking, emailed within 48 hours.</p>
+    <p>U.S. shipping is free on orders over $${CONFIG.freeShipThreshold}. Below that, a flat $${CONFIG.flatShipping.toFixed(2)} rate applies.</p>`,
+  returns: `<h2>Returns &amp; refunds</h2>
+    <p>You have 30 days from delivery to request a return or refund. If your pet isn't into it, email ${CONFIG.supportEmail} with your order number and we'll make it right — replacement, store credit, or refund.</p>
+    <p>Items damaged in transit are replaced free, no return needed — just send a photo.</p>`,
+  privacy: `<h2>Privacy policy</h2>
+    <p>We collect only what's needed to fulfill your order: name, shipping address, and email. Payments are processed securely by PayPal — we never see or store your card details.</p>
+    <p>We don't sell your data. Ever. Unsubscribe from emails anytime with one click.</p>`
+};
+function openPolicy(key) { $("#policyBody").innerHTML = POLICIES[key]; openSheet("#policyModal"); }
+
+/* ---------------- toast ---------------- */
+let toastTimer;
+function toast(msg) {
+  const t = $("#toast"); t.textContent = msg; t.classList.add("show");
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove("show"), 2100);
+}
+
+/* ---------------- ticker + reveal ---------------- */
+document.documentElement.classList.add("js");
+document.getElementById("tickerTrack").innerHTML += document.getElementById("tickerTrack").innerHTML;
+const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }), { threshold: .12 });
+document.querySelectorAll(".reveal").forEach(el => io.observe(el));
+
+/* ---------------- init ---------------- */
+renderGrid();
+syncCart();
+</script>
+</body>
+</html>
