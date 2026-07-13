@@ -355,8 +355,8 @@ footer{padding:4.5rem 0 2.5rem}
       <h2 class="serif">The Calm Kit<em>.</em></h2>
       <p>Our CloudCalm™ donut bed paired with the ZenLick™ soothing duo. The complete wind-down ritual for pets who pace, shake, or can't settle — bundled, and quietly discounted.</p>
       <div class="price-row">
-        <span class="price">$54.99</span>
-        <span class="compare">$61.98</span>
+        <span class="price">from $49.99</span>
+        <span class="compare">$56.98</span>
       </div>
       <button class="btn btn-ember" data-add="calm-kit">Add the Calm Kit</button>
     </div>
@@ -539,11 +539,12 @@ const CONFIG = {
 /* To use real photos: paste supplier image URLs into img below.
    Leave img:"" to keep the designed vitrine placeholder. */
 const PRODUCTS = [
-  {id:"cloudcalm-bed", no:"Nº 01", cat:"calm", emoji:"🛏️", img:"", badge:"Best Seller",
+  {id:"cloudcalm-bed", no:"Nº 01", cat:"calm", emoji:"🛏️", img:"images/cloudcalm.jpg", badge:"Best Seller",
    name:"CloudCalm™ Donut Bed", tag:"The bed that hugs back",
-   price:44.99, compare:69.99,
-   options:{Size:["S (up to 10 lb)","M (up to 25 lb)","L (up to 45 lb)","XL (up to 70 lb)"],Color:["Beige","Grey"]},
-   desc:"CloudCalm's raised rim mimics a mother's embrace, activating your pet's natural sense of security. Designed for dogs and cats with separation anxiety, storm stress, or trouble settling at night. Ultra-soft faux fur, machine washable, non-slip base. Watch them melt into it."},
+   price:39.99, compare:59.99,
+   options:{Size:["S · 40 cm (up to 10 lb)","M · 50 cm (up to 25 lb)","L · 60 cm (up to 45 lb)","XL · 70 cm (up to 70 lb)"],Color:["Grey","Beige","Pink"]},
+   optionPrices:{Size:{"S · 40 cm (up to 10 lb)":39.99,"M · 50 cm (up to 25 lb)":44.99,"L · 60 cm (up to 45 lb)":54.99,"XL · 70 cm (up to 70 lb)":64.99}},
+   desc:"CloudCalm's raised rim mimics a mother's embrace, activating your pet's natural sense of security. Designed for dogs and cats with separation anxiety, storm stress, or trouble settling at night. Ultra-soft faux fur, machine washable, non-slip base. Sizing tip: CloudCalm runs snug by design — that's the hug. Between sizes? Go one up."},
   {id:"zenlick-mat", no:"Nº 02", cat:"calm", emoji:"🍯", img:"", badge:"",
    name:"ZenLick™ Soothing Mat Duo", tag:"Turns stress into spa time",
    price:16.99, compare:24.99,
@@ -576,8 +577,9 @@ const PRODUCTS = [
    desc:"No refills, no batteries, no sticky sheets — just roll and empty. Works on sofas, beds, car seats, and that one blanket they've decided is theirs."},
   {id:"calm-kit", no:"Kit I", cat:"bundles", emoji:"🌙", img:"", badge:"Save $7",
    name:"The Calm Kit™", tag:"CloudCalm bed + ZenLick duo",
-   price:54.99, compare:61.98,
-   options:{Size:["S (up to 10 lb)","M (up to 25 lb)","L (up to 45 lb)","XL (up to 70 lb)"],Color:["Beige","Grey"]},
+   price:49.99, compare:56.98, compareDelta:6.99,
+   options:{Size:["S · 40 cm (up to 10 lb)","M · 50 cm (up to 25 lb)","L · 60 cm (up to 45 lb)","XL · 70 cm (up to 70 lb)"],Color:["Grey","Beige","Pink"]},
+   optionPrices:{Size:{"S · 40 cm (up to 10 lb)":49.99,"M · 50 cm (up to 25 lb)":54.99,"L · 60 cm (up to 45 lb)":64.99,"XL · 70 cm (up to 70 lb)":74.99}},
    desc:"Everything an anxious pet needs to feel safe: our best-selling CloudCalm™ donut bed paired with the ZenLick™ soothing duo. The complete wind-down ritual, bundled and quietly discounted."},
   {id:"boredom-kit", no:"Kit II", cat:"bundles", emoji:"🧩", img:"", badge:"Save $13",
    name:"Boredom Buster Kit™", tag:"Snuffle mat + feeder + lick mats",
@@ -612,6 +614,14 @@ const ART = {
 const artOf = p => p.img
   ? `<img src="${p.img}" alt="${p.name}" loading="lazy">`
   : (ART[p.id] ? `<span class="obj art">${ART[p.id]}</span>` : `<span class="obj">${p.emoji}</span>`);
+const priceOf = (p, opts = {}) => {
+  if (p.optionPrices) for (const [k, map] of Object.entries(p.optionPrices)) {
+    const v = opts[k]; if (v != null && map[v] != null) return map[v];
+  }
+  return p.price;
+};
+const compareOf = (p, opts = {}) => p.compareDelta ? priceOf(p, opts) + p.compareDelta
+  : (p.optionPrices ? Math.ceil(priceOf(p, opts) * 1.5) - 0.01 : p.compare);
 
 /* ---------------- render grid ---------------- */
 function renderGrid(cat = "all") {
@@ -627,7 +637,7 @@ function renderGrid(cat = "all") {
       </div>
       <h3>${p.name}</h3>
       <p class="tag">${p.tag}</p>
-      <div class="price-row"><span class="price">${money(p.price)}</span><span class="compare">${money(p.compare)}</span></div>
+      <div class="price-row"><span class="price">${p.optionPrices ? "from " : ""}${money(p.price)}</span><span class="compare">${money(p.compare)}</span></div>
       <div class="card-actions">
         <button class="btn btn-line" onclick="openProduct('${p.id}')">Details</button>
         <button class="btn btn-ember" data-add="${p.id}">Add</button>
@@ -650,16 +660,22 @@ function openProduct(id) {
     <div class="modal-info">
       <span class="no-line">${p.no}${p.badge ? " — " + p.badge : ""}</span>
       <h2>${p.name}</h2>
-      <div class="price-row" style="justify-content:flex-start"><span class="price" style="font-size:1.4rem">${money(p.price)}</span><span class="compare">${money(p.compare)}</span></div>
+      <div class="price-row" style="justify-content:flex-start"><span class="price" id="pmPrice" style="font-size:1.4rem">${money(p.price)}</span><span class="compare" id="pmCompare">${money(p.compare)}</span></div>
       <p class="desc">${p.desc}</p>
       ${p.options ? Object.entries(p.options).map(([k, vals]) => `
         <div class="opt-group"><label for="opt-${k}">${k}</label>
         <select id="opt-${k}" data-opt="${k}">${vals.map(v => `<option>${v}</option>`).join("")}</select></div>`).join("") : ""}
       <div class="modal-cta">
-        <button class="btn btn-ember" onclick="addFromModal('${p.id}')">Add to cart — ${money(p.price)}</button>
+        <button class="btn btn-ember" id="pmAdd" onclick="addFromModal('${p.id}')">Add to cart — ${money(p.price)}</button>
       </div>
       <p class="micro">30-day returns · Tracked shipping · Free U.S. shipping $50+</p>
     </div>`;
+  document.querySelectorAll("#pmBody select").forEach(s => s.addEventListener("change", () => {
+    const o = {}; document.querySelectorAll("#pmBody select").forEach(x => o[x.dataset.opt] = x.value);
+    document.getElementById("pmPrice").textContent = money(priceOf(p, o));
+    document.getElementById("pmCompare").textContent = money(compareOf(p, o));
+    document.getElementById("pmAdd").textContent = "Add to cart — " + money(priceOf(p, o));
+  }));
   openSheet("#productModal");
 }
 function addFromModal(id) {
@@ -685,7 +701,7 @@ function changeQty(i, d) {
 }
 function removeLine(i) { cart.splice(i, 1); syncCart(); }
 
-function cartSubtotal() { return cart.reduce((s, l) => s + prod(l.id).price * l.qty, 0); }
+function cartSubtotal() { return cart.reduce((s, l) => s + priceOf(prod(l.id), l.opts) * l.qty, 0); }
 
 function syncCart() {
   $("#cartCount").textContent = cart.reduce((s, l) => s + l.qty, 0);
@@ -706,7 +722,7 @@ function syncCart() {
       <div class="line-info">
         <h4>${p.name}</h4>
         ${optStr ? `<div class="opts">${optStr}</div>` : ""}
-        <div class="lp">${money(p.price * l.qty)}</div>
+        <div class="lp">${money(priceOf(p, l.opts) * l.qty)}</div>
         <div class="qty">
           <button onclick="changeQty(${i},-1)" aria-label="Decrease">−</button>${l.qty}<button onclick="changeQty(${i},1)" aria-label="Increase">+</button>
           <button class="rm" onclick="removeLine(${i})">Remove</button>
@@ -778,7 +794,7 @@ function renderPayPal(total) {
               return {
                 name: (p.name + (optStr ? " — " + optStr : "")).slice(0, 120),
                 quantity: String(l.qty),
-                unit_amount: { currency_code: CONFIG.currency, value: p.price.toFixed(2) }
+                unit_amount: { currency_code: CONFIG.currency, value: priceOf(p, l.opts).toFixed(2) }
               };
             })
           }]
