@@ -9,6 +9,13 @@
 <meta property="og:title" content="PAWVANA — Where wild minds learn to rest">
 <meta property="og:description" content="A collection of quiet objects for pets who feel a little too much.">
 <meta property="og:type" content="website">
+<meta property="og:url" content="https://aliexpressgood585.github.io/pawvana/">
+<meta property="og:image" content="https://aliexpressgood585.github.io/pawvana/images/cloudcalm.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://aliexpressgood585.github.io/pawvana/images/cloudcalm.jpg">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐾</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400;1,6..96,500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -90,6 +97,8 @@ header.site{position:sticky;top:0;z-index:60;background:rgba(15,21,18,.85);backd
 .hero .lede{max-width:36rem;margin:0 auto 2.6rem;color:var(--moon-dim);font-size:1.02rem;font-weight:500}
 .hero-ctas{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-bottom:3rem}
 .trust{display:flex;justify-content:center;gap:2.4rem;flex-wrap:wrap;font-size:.62rem;font-weight:700;letter-spacing:.26em;text-transform:uppercase;color:var(--moon-dim)}
+.countdown-wrap{margin-top:1.6rem;display:flex;align-items:center;justify-content:center;gap:.9rem;font-size:.62rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--moon-dim)}
+.countdown-clock{font-family:var(--serif);font-size:1.5rem;color:var(--ember);letter-spacing:.12em;line-height:1}
 @media (prefers-reduced-motion:no-preference){
   .moon{animation:moonbreath 7s ease-in-out infinite}
   @keyframes moonbreath{0%,100%{opacity:.85;transform:translateX(-50%) scale(1)}50%{opacity:1;transform:translateX(-50%) scale(1.05)}}
@@ -330,6 +339,10 @@ footer{padding:4.5rem 0 2.5rem}
       <span>Tracked Worldwide</span>
       <span>Free U.S. Shipping $50+</span>
     </div>
+    <div class="countdown-wrap" id="countdownWrap">
+      <span class="countdown-label">WELCOME15 offer ends in</span>
+      <span class="countdown-clock" id="countdownClock">--:--:--</span>
+    </div>
   </div>
 </section>
 
@@ -545,6 +558,33 @@ footer{padding:4.5rem 0 2.5rem}
   <div id="policyBody"></div>
 </div>
 
+<!-- THANK YOU SCREEN -->
+<div id="thankYouScreen" style="
+  position:fixed;inset:0;z-index:500;background:var(--night);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:2rem;opacity:0;pointer-events:none;
+  transition:opacity .5s ease
+">
+  <div style="max-width:480px">
+    <div style="font-size:3.6rem;margin-bottom:1.4rem">🐾</div>
+    <span class="eyebrow" style="display:block;margin-bottom:1rem">Order confirmed</span>
+    <h2 class="serif" style="font-size:clamp(2rem,5vw,3.2rem);margin-bottom:.9rem">
+      Thank you, <em id="tyName">friend</em>.
+    </h2>
+    <p style="color:var(--moon-dim);margin-bottom:.5rem;font-size:.96rem">Your calm is on its way.</p>
+    <p style="color:var(--moon-dim);margin-bottom:2rem;font-size:.86rem" id="tyOrder"></p>
+    <p style="color:var(--moon-dim);font-size:.88rem;max-width:32rem;margin:0 auto 2.4rem">
+      Tracking will arrive by email within 48 hours.<br>
+      Questions? Write us at <a href="mailto:hello@pawvana.com" style="color:var(--ember)">hello@pawvana.com</a>
+    </p>
+    <button class="btn btn-ember" onclick="
+      document.getElementById('thankYouScreen').style.opacity='0';
+      document.getElementById('thankYouScreen').style.pointerEvents='none';
+      document.body.style.overflow='';
+    ">Continue shopping</button>
+  </div>
+</div>
+
 <script>
 /* ==============================================================
    PAWVANA CONFIG — everything you need to edit lives right here
@@ -611,10 +651,8 @@ const PRODUCTS = [
 ];
 
 /* ---------------- state ---------------- */
-let cart = [];
+let cart = (() => { try { return JSON.parse(localStorage.getItem("pawvana-cart") || "[]"); } catch(e) { return []; } })();
 let discount = null;
-/* Cart lives in memory. After deploying, persist it by
-   uncommenting the localStorage line marked below. */
 
 const $ = s => document.querySelector(s);
 const money = n => "$" + n.toFixed(2);
@@ -712,16 +750,17 @@ function addToCart(id, opts = {}) {
   const key = id + JSON.stringify(opts);
   const found = cart.find(l => l.id + JSON.stringify(l.opts) === key);
   found ? found.qty++ : cart.push({ id, qty: 1, opts });
-  // localStorage.setItem("pawvana-cart", JSON.stringify(cart)); // ← enable after deploy
+  try { localStorage.setItem("pawvana-cart", JSON.stringify(cart)); } catch(e) {}
   toast("Added to cart");
   syncCart();
 }
+function saveCart() { try { localStorage.setItem("pawvana-cart", JSON.stringify(cart)); } catch(e) {} }
 function changeQty(i, d) {
   cart[i].qty += d;
   if (cart[i].qty < 1) cart.splice(i, 1);
-  syncCart();
+  saveCart(); syncCart();
 }
-function removeLine(i) { cart.splice(i, 1); syncCart(); }
+function removeLine(i) { cart.splice(i, 1); saveCart(); syncCart(); }
 
 function cartSubtotal() { return cart.reduce((s, l) => s + priceOf(prod(l.id), l.opts) * l.qty, 0); }
 
@@ -823,8 +862,10 @@ function renderPayPal(total) {
         });
       },
       onApprove: (d, actions) => actions.order.capture().then(det => {
-        cart = []; discount = null; syncCart();
-        $("#cartLines").innerHTML = `<div class="empty-cart"><div class="big">Thank you, ${det.payer.name.given_name}.</div>Order confirmed — tracking arrives by email within 48 hours.</div>`;
+        cart = []; discount = null;
+        saveCart(); syncCart();
+        closeAll();
+        showThankYou(det.payer.name.given_name, det.id);
       }),
       onError: () => toast("Payment didn't go through — try again")
     }).render("#paypal-zone");
@@ -891,6 +932,45 @@ setTimeout(() => {
     openSheet("#promoModal");
   }
 }, 4500);
+
+/* ---------------- thank you screen ---------------- */
+function showThankYou(firstName, orderId) {
+  document.getElementById("tyName").textContent = firstName || "friend";
+  document.getElementById("tyOrder").textContent = orderId ? "Order #" + orderId.slice(-8).toUpperCase() : "";
+  const el = document.getElementById("thankYouScreen");
+  el.style.opacity = "1";
+  el.style.pointerEvents = "auto";
+  document.body.style.overflow = "hidden";
+}
+
+/* ---------------- countdown timer (24h rolling, tied to promo) ---------------- */
+(function initCountdown() {
+  const KEY = "pawvana-countdown-end";
+  let end;
+  try {
+    end = parseInt(localStorage.getItem(KEY), 10);
+    if (!end || end < Date.now()) {
+      end = Date.now() + 24 * 60 * 60 * 1000;
+      localStorage.setItem(KEY, end);
+    }
+  } catch(e) { end = Date.now() + 24 * 60 * 60 * 1000; }
+
+  const clock = document.getElementById("countdownClock");
+  function tick() {
+    const diff = end - Date.now();
+    if (diff <= 0) {
+      try { localStorage.removeItem(KEY); } catch(e) {}
+      document.getElementById("countdownWrap").style.display = "none";
+      return;
+    }
+    const h = String(Math.floor(diff / 3600000)).padStart(2, "0");
+    const m = String(Math.floor((diff % 3600000) / 60000)).padStart(2, "0");
+    const s = String(Math.floor((diff % 60000) / 1000)).padStart(2, "0");
+    clock.textContent = h + ":" + m + ":" + s;
+  }
+  tick();
+  setInterval(tick, 1000);
+})();
 
 /* ---------------- init ---------------- */
 renderGrid();
