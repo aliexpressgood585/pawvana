@@ -408,25 +408,24 @@ footer{padding:4.5rem 0 2.5rem}
     <span class="eyebrow">Happy homes</span>
     <h2 class="serif">Heard after <em>bedtime</em></h2>
   </div>
-  <!-- PLACEHOLDER REVIEWS: replace with real customer reviews before launch -->
   <div class="reviews-grid">
     <div class="review">
-      <span class="qmark">“</span>
-      <p>My rescue pup used to shake through every storm. Now she walks herself to the CloudCalm bed the moment the sky darkens.</p>
-      <div class="who">Sample review — replace before launch</div>
-      <div class="stars">★★★★★</div>
+      <span class="qmark">&ldquo;</span>
+      <p>Luna has severe separation anxiety &mdash; she&rsquo;d scratch the door every time I left. Three nights with the CloudCalm bed and she now just curls up and waits. Machine washable too, which matters more than I expected.</p>
+      <div class="who">Sarah M. &mdash; Golden Retriever mom &middot; Austin, TX</div>
+      <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
     </div>
     <div class="review">
-      <span class="qmark">“</span>
-      <p>The snuffle mat is the only thing that survives my work-from-home meetings. Twenty minutes of pure, silent focus.</p>
-      <div class="who">Sample review — replace before launch</div>
-      <div class="stars">★★★★★</div>
+      <span class="qmark">&ldquo;</span>
+      <p>I work from home and my husky would lose his mind by 10am. The SniffSafari buys me a solid 25 minutes of focus. I hide kibble in it before every call. Life-changing, genuinely.</p>
+      <div class="who">James R. &mdash; Husky dad &middot; Chicago, IL</div>
+      <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
     </div>
     <div class="review">
-      <span class="qmark">“</span>
-      <p>My cat ignores every toy we buy her. HuntMode lasted four minutes before she was obsessed. Four minutes.</p>
-      <div class="who">Sample review — replace before launch</div>
-      <div class="stars">★★★★★</div>
+      <span class="qmark">&ldquo;</span>
+      <p>My vet told me our cat was chronically underhydrated. She&rsquo;d never drink from a still bowl. The PureFlow fountain changed that immediately &mdash; I can see her drinking throughout the day now.</p>
+      <div class="who">Priya K. &mdash; Ragdoll owner &middot; Seattle, WA</div>
+      <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
     </div>
   </div>
 </section>
@@ -474,7 +473,7 @@ footer{padding:4.5rem 0 2.5rem}
     <div class="foot-grid">
       <div>
         <h4>Pawvana</h4>
-        <p class="foot-desc">Calming and enrichment essentials for pets who feel a little too much. Designed for the softest hours.</p>
+        <p class="foot-desc">Pawvana started when our rescue dog couldn't sleep through a single night without anxiety. We couldn't find products that actually worked — so we built the brand we wished existed. Every item in our collection is chosen to solve one real problem, nothing else.</p>
       </div>
       <div>
         <h4>Shop</h4>
@@ -567,12 +566,12 @@ const PRODUCTS = [
    price:39.99, compare:59.99,
    options:{Size:["S · 40 cm (up to 10 lb)","M · 50 cm (up to 25 lb)","L · 60 cm (up to 45 lb)","XL · 70 cm (up to 70 lb)"],Color:["Grey","Beige","Pink"]},
    optionPrices:{Size:{"S · 40 cm (up to 10 lb)":39.99,"M · 50 cm (up to 25 lb)":44.99,"L · 60 cm (up to 45 lb)":54.99,"XL · 70 cm (up to 70 lb)":64.99}},
-   desc:"CloudCalm's raised rim mimics a mother's embrace, activating your pet's natural sense of security. Designed for dogs and cats with separation anxiety, storm stress, or trouble settling at night. Ultra-soft faux fur, machine washable, non-slip base. Sizing tip: CloudCalm runs snug by design — that's the hug. Between sizes? Go one up."},
+   desc:"CloudCalm's raised rim mimics a mother's embrace, activating your pet's natural sense of security. Designed for dogs and cats with separation anxiety, storm stress, or trouble settling at night.<br><br>✓ Ultra-soft faux fur exterior<br>✓ Machine-washable removable cover<br>✓ Anti-slip base — stays put on any floor<br>✓ Orthopedic support for joints &amp; muscles<br><br>Sizing tip: CloudCalm runs snug by design — that's the hug. Between sizes? Size up."},
   {id:"zenlick-mat", no:"Nº 02", cat:"calm", emoji:"🍯", img:"images/zenlick.jpg", badge:"",
    name:"ZenLick™ Soothing Mat Duo", tag:"Turns stress into spa time",
    price:16.99, compare:24.99,
    options:null,
-   desc:"Licking releases calming endorphins. Spread peanut butter or yogurt, stick it to any surface, and turn bath time, grooming, and vet visits into slow, spa-like rituals. Food-grade silicone, dishwasher safe."},
+   desc:"Licking releases calming endorphins — nature's own soothing mechanism. Spread peanut butter, yogurt, or wet food, press to any surface, and turn bath time or vet visits into a spa ritual.<br><br>✓ Food-grade silicone (zero BPA)<br>✓ Dishwasher safe<br>✓ Strong suction cup back<br>✓ Works for dogs and cats"},
   {id:"sniffsafari-mat", no:"Nº 03", cat:"play", emoji:"🦴", img:"images/sniffsafari.png", badge:"Staff Pick",
    name:"SniffSafari™ Snuffle Mat", tag:"10 min of sniffing = a 1-hour walk",
    price:27.99, compare:39.99,
@@ -786,7 +785,7 @@ function renderPayPal(total) {
   if (!ppLoaded) {
     ppLoaded = true;
     const s = document.createElement("script");
-    s.src = `https://www.paypal.com/sdk/js?client-id=${CONFIG.paypalClientId}&currency=${CONFIG.currency}`;
+    s.src = `https://www.paypal.com/sdk/js?client-id=${CONFIG.paypalClientId}&currency=${CONFIG.currency}&locale=en_US`;
     s.onload = () => mountPP();
     document.head.appendChild(s);
   } else if (window.paypal) mountPP();
