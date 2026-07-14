@@ -16,6 +16,13 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://aliexpressgood585.github.io/pawvana/images/cloudcalm.jpg">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐾</text></svg>">
+<!-- TikTok Pixel: replace YOUR_PIXEL_ID with your real pixel ID from ads.tiktok.com -->
+<script>
+!function(w,d,t){w.TiktokAnalyticsObject=t;var ttq=w[t]=w[t]||[];ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie"],ttq.setAndDefer=function(t,e){t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}};for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);ttq.instance=function(t){for(var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n]);return e},ttq.load=function(e,n){var i="https://analytics.tiktok.com/i18n/pixel/events.js";ttq._i=ttq._i||{},ttq._i[e]=[],ttq._i[e]._u=i,ttq._t=ttq._t||{},ttq._t[e]=+new Date,ttq._o=ttq._o||{},ttq._o[e]=n||{};var o=document.createElement("script");o.type="text/javascript",o.async=!0,o.src=i+"?sdkid="+e+"&lib="+t;var a=document.getElementsByTagName("script")[0];a.parentNode.insertBefore(o,a)};
+  var TIKTOK_PIXEL_ID = "YOUR_PIXEL_ID"; // ← paste your pixel ID here
+  if (TIKTOK_PIXEL_ID !== "YOUR_PIXEL_ID") { ttq.load(TIKTOK_PIXEL_ID); ttq.page(); }
+}(window, document, 'ttq');
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400;1,6..96,500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -303,6 +310,19 @@ footer{padding:4.5rem 0 2.5rem}
 .policy{width:min(640px,94%);padding:2.4rem}
 .policy h2{font-family:var(--serif);font-weight:500;font-size:1.7rem;margin-bottom:1.2rem}
 .policy p{font-size:.92rem;color:var(--moon-dim);margin-bottom:.9rem}
+
+/* upsell zone */
+.upsell{border:1px solid rgba(226,166,91,.28);padding:1rem 1.1rem;margin-bottom:1rem;background:linear-gradient(135deg,rgba(226,166,91,.06),transparent)}
+.upsell-label{font-size:.58rem;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:var(--ember);margin-bottom:.75rem;display:block}
+.upsell-items{display:flex;flex-direction:column;gap:.6rem}
+.upsell-item{display:flex;align-items:center;gap:.8rem}
+.upsell-thumb{width:42px;height:52px;border-radius:99px 99px 6px 6px;border:1px solid var(--line-soft);background:var(--night-3);display:grid;place-items:center;font-size:1.1rem;overflow:hidden;flex-shrink:0}
+.upsell-thumb img{width:100%;height:100%;object-fit:cover}
+.upsell-info{flex:1;min-width:0}
+.upsell-info .un{font-family:var(--serif);font-size:.92rem;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.upsell-info .up{font-family:var(--serif);color:var(--ember);font-size:.82rem}
+.upsell-add{font-size:.58rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;padding:.45rem .8rem;border:1px solid rgba(226,166,91,.5);color:var(--ember);border-radius:2px;white-space:nowrap;transition:all .2s;flex-shrink:0}
+.upsell-add:hover{background:var(--ember);color:var(--night)}
 </style>
 </head>
 <body style="background-color:#0F1512;color:#F2EDE2">
@@ -473,8 +493,10 @@ footer{padding:4.5rem 0 2.5rem}
     <span class="eyebrow">The Night Letter</span>
     <h2 class="serif">Rituals, drops, <em>early access</em></h2>
     <p>One letter a week. Enrichment rituals and subscriber-only offers. Worth opening.</p>
-    <form class="email-form" onsubmit="event.preventDefault();toast('Welcome to the Night Letter');this.reset()">
-      <input type="email" placeholder="your@email.com" required aria-label="Email address">
+    <!-- Mailchimp embed: replace ACTION_URL with your Mailchimp form action URL -->
+    <!-- Get it from: Mailchimp → Audience → Signup forms → Embedded forms → copy action URL -->
+    <form class="email-form" id="newsletterForm" onsubmit="submitNewsletter(event)">
+      <input type="email" id="nlEmail" placeholder="your@email.com" required aria-label="Email address">
       <button class="btn btn-ember" type="submit">Subscribe</button>
     </form>
   </div>
@@ -538,6 +560,7 @@ footer{padding:4.5rem 0 2.5rem}
       <button class="btn btn-line" onclick="applyDiscount()">Apply</button>
     </div>
     <div class="totals" id="totals"></div>
+    <div id="upsell-zone"></div>
     <div class="trust-line">🔒 Secure checkout · PayPal Buyer Protection · 30-day returns</div>
     <div id="paypal-zone"></div>
   </div>
@@ -802,6 +825,7 @@ function syncCart() {
     <div class="row"><span>Shipping</span><span>${ship === 0 ? "Free" : money(ship)}</span></div>
     <div class="row grand"><span>Total</span><span>${money(total)}</span></div>` : "";
 
+  renderUpsell();
   renderPayPal(total);
 }
 
@@ -862,6 +886,8 @@ function renderPayPal(total) {
         });
       },
       onApprove: (d, actions) => actions.order.capture().then(det => {
+        const finalTotal = parseFloat(det.purchase_units[0].amount.value);
+        ttqPurchase(finalTotal, det.id);
         cart = []; discount = null;
         saveCart(); syncCart();
         closeAll();
@@ -933,6 +959,50 @@ setTimeout(() => {
   }
 }, 4500);
 
+/* ---------------- upsell engine ---------------- */
+const UPSELL_MAP = {
+  "cloudcalm-bed":    ["zenlick-mat","sniffsafari-mat"],
+  "zenlick-mat":      ["cloudcalm-bed","calm-kit"],
+  "sniffsafari-mat":  ["slowsip-bowl","boredom-kit"],
+  "huntmode-toy":     ["pureflow-fountain","zenlick-mat"],
+  "slowsip-bowl":     ["sniffsafari-mat","furaway-roller"],
+  "pureflow-fountain":["furaway-roller","huntmode-toy"],
+  "furaway-roller":   ["pureflow-fountain","cloudcalm-bed"],
+  "calm-kit":         ["sniffsafari-mat","furaway-roller"],
+  "boredom-kit":      ["cloudcalm-bed","pureflow-fountain"]
+};
+function renderUpsell() {
+  const zone = document.getElementById("upsell-zone");
+  if (!cart.length) { zone.innerHTML = ""; return; }
+  const inCart = new Set(cart.map(l => l.id));
+  const suggestions = [];
+  for (const l of cart) {
+    for (const sid of (UPSELL_MAP[l.id] || [])) {
+      if (!inCart.has(sid) && !suggestions.includes(sid)) suggestions.push(sid);
+      if (suggestions.length >= 2) break;
+    }
+    if (suggestions.length >= 2) break;
+  }
+  if (!suggestions.length) { zone.innerHTML = ""; return; }
+  zone.innerHTML = `<div class="upsell">
+    <span class="upsell-label">Often bought together</span>
+    <div class="upsell-items">${suggestions.map(sid => {
+      const p = prod(sid);
+      const thumb = p.img
+        ? `<img src="${p.img}" alt="${p.name}" loading="lazy">`
+        : `<span>${p.emoji}</span>`;
+      return `<div class="upsell-item">
+        <div class="upsell-thumb">${thumb}</div>
+        <div class="upsell-info">
+          <div class="un">${p.name}</div>
+          <div class="up">${money(p.price)}</div>
+        </div>
+        <button class="upsell-add" onclick="addToCart('${p.id}')">+ Add</button>
+      </div>`;
+    }).join("")}</div>
+  </div>`;
+}
+
 /* ---------------- thank you screen ---------------- */
 function showThankYou(firstName, orderId) {
   document.getElementById("tyName").textContent = firstName || "friend";
@@ -971,6 +1041,33 @@ function showThankYou(firstName, orderId) {
   tick();
   setInterval(tick, 1000);
 })();
+
+/* ---------------- newsletter (Mailchimp) ---------------- */
+const MAILCHIMP_URL = "YOUR_MAILCHIMP_ACTION_URL"; // ← paste action URL from Mailchimp
+function submitNewsletter(e) {
+  e.preventDefault();
+  const email = document.getElementById("nlEmail").value.trim();
+  if (MAILCHIMP_URL === "YOUR_MAILCHIMP_ACTION_URL") {
+    toast("Newsletter coming soon — stay tuned");
+    document.getElementById("newsletterForm").reset();
+    return;
+  }
+  const url = MAILCHIMP_URL.replace("/post?", "/post-json?") + "&EMAIL=" + encodeURIComponent(email) + "&c=?";
+  const s = document.createElement("script");
+  s.src = url;
+  window.mailchimpCallback = r => {
+    toast(r.result === "success" ? "You're on the list" : (r.msg || "Something went wrong"));
+    document.getElementById("newsletterForm").reset();
+    s.remove();
+  };
+  window.jsonpCallback = window.mailchimpCallback;
+  document.head.appendChild(s);
+}
+
+/* ---------------- TikTok: fire Purchase event on buy ---------------- */
+function ttqPurchase(total, orderId) {
+  try { window.ttq && window.ttq.track("Purchase", { value: total, currency: "USD", order_id: orderId }); } catch(e) {}
+}
 
 /* ---------------- init ---------------- */
 renderGrid();
