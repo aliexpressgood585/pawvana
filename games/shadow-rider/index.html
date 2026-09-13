@@ -350,11 +350,11 @@ function tube(pts, radii, radial = 12, seg = 3) {
 const STRATA = [0x9c6f49, 0x87593a, 0xb08258, 0x6f452e, 0xa2764e];
 function rockGeo(r, seg, squash, erode, strata) {
   const g = new THREE.SphereGeometry(r, seg, Math.max(8, seg * .7 | 0));
-  const p = g.attributes.position, n = p.count, col = new Float32Array(n * 3), c = new THREE.Color();
+  const p = g.attributes.position, n = p.count, col = new Float32Array(n * 3), c = new THREE.Color(), next = new THREE.Color();
   for (let i = 0; i < n; i++) {
     let x = p.getX(i), y = p.getY(i), z = p.getZ(i);
     const len = Math.hypot(x, y, z) || 1, ux = x / len, uy = y / len, uz = z / len;
-    const groove = fbm(Math.atan2(uz, ux) * 2.2 + 20, y * .9, 3) - .5;
+    const groove = fbm(ux * 3.2 + uz * 1.7 + 20, y * .9 + uz * 2, 3) - .5;
     const lump = fbm(ux * 2.2 + 5, uz * 2.2 + uy * .8, 3) - .5;
     const fine = (fbm(ux * 5.5 + 31, uz * 5.5 + y * 1.8, 3) - .5) * .05;
     const d = 1 + groove * erode + lump * erode * .8 + fine;
@@ -365,10 +365,13 @@ function rockGeo(r, seg, squash, erode, strata) {
   g.computeVertexNormals();
   for (let i = 0; i < n; i++) {
     const y = p.getY(i);
-    const band = Math.floor(y * strata + fbm(p.getX(i) * .6, p.getZ(i) * .6, 2) * .8 + 40) % STRATA.length;
-    c.set(STRATA[(band + STRATA.length) % STRATA.length]);
+    const layer = y * strata + fbm(p.getX(i) * .6, p.getZ(i) * .6, 2) * .8 + 40;
+    const band = ((Math.floor(layer) % STRATA.length) + STRATA.length) % STRATA.length;
+    const edge = clamp((fract(layer) - .65) / .35, 0, 1);
+    c.set(STRATA[band]).lerp(next.set(STRATA[(band + 1) % STRATA.length]), edge * edge * (3 - 2 * edge));
     const ao = .7 + .3 * clamp((y + r * squash) / (r * squash * 1.6), 0, 1);
-    const wear = .9 + vn(p.getX(i) * 3, p.getZ(i) * 3) * .2;
+    const wear = .88 + vn(p.getX(i) * 3 + y, p.getZ(i) * 3) * .16 +
+      .07 * Math.max(0, g.attributes.normal.getY(i));
     col[i * 3] = c.r * ao * wear; col[i * 3 + 1] = c.g * ao * wear; col[i * 3 + 2] = c.b * ao * wear;
   }
   g.setAttribute('color', new THREE.BufferAttribute(col, 3));
@@ -590,11 +593,12 @@ function duneShape(seed) {
     const x = p.getX(i), y = p.getY(i), z = p.getZ(i);
     const d = 1 + (fbm(x * 1.9 + seed, z * 1.9, 4) - .5) * .85;
     const slip = z > 0 ? 1 : .72;                  // steeper leeward face
-    p.setXYZ(i, x * d * 1.35, y * d * (.42 + fbm(x * 2 + seed, z * 2, 2) * .2), z * d * slip);
+    const crest = .88 + .12 * Math.cos(x * 4.2 + z * 1.3);
+    p.setXYZ(i, x * d * 1.35, y * d * (.42 + fbm(x * 2 + seed, z * 2, 2) * .2) * crest, z * d * slip);
   }
   g.computeVertexNormals();
   for (let i = 0; i < p.count; i++) {
-    const t = clamp(p.getY(i) * 2.2 + .3, 0, 1);
+    const t = clamp(p.getY(i) * 1.8 + .22 + g.attributes.normal.getY(i) * .15, 0, 1);
     const c = cSide.clone().lerp(cTop, t);
     col[i * 3] = c.r; col[i * 3 + 1] = c.g; col[i * 3 + 2] = c.b;
   }
@@ -624,12 +628,16 @@ tufts.im.receiveShadow = true;
 
 /* ---- clouds + shade patches ---- */
 const cloudGeo = build(a => {
-  a(sph(1, 12, 8), 0xffc9a0, [0, 0, 0], [0, 0, 0], [1, .3, .75]);
-  a(sph(.72, 10, 7), 0xe89c74, [1.15, -.08, .2], [0, 0, 0], [1, .3, .75]);
-  a(sph(.62, 10, 7), 0xffdcb8, [-1.05, .08, -.2], [0, 0, 0], [1, .3, .75]);
-  a(sph(.5, 9, 6), 0xf0b088, [.4, .12, -.5], [0, 0, 0], [1, .3, .8]);
+  const r = rng(23);
+  a(sph(1, 16, 10), 0xc1b8b1, [0, -.08, 0], [0, 0, 0], [1.7, .20, .65]);
+  for (let i = 0; i < 10; i++) {
+    const x = (r() - .5) * 2.6, z = (r() - .5) * .8, s = .32 + r() * .42;
+    a(sph(s, 12, 8), i % 3 ? 0xeee4d8 : 0xd5c9bd,
+      [x, .04 + r() * .16, z], [0, 0, 0], [1, .45 + r() * .25, .8]);
+  }
 });
-const clouds = pool(cloudGeo, 4, new THREE.MeshBasicMaterial({ vertexColors: true, fog: false }));
+const clouds = pool(cloudGeo, 4, new THREE.MeshStandardMaterial({
+  vertexColors: true, roughness: 1, envMapIntensity: .7, fog: false }));
 const shadeMat = new THREE.MeshBasicMaterial({
   map: blobTexture(), color: 0x161028, transparent: true, opacity: .86,
   depthWrite: false, fog: true
@@ -669,16 +677,31 @@ function burst(n, x, y, z, spread, up, kind, size) {
 const oasis = new THREE.Group();
 oasis.position.set(0, 0, CFG.goal + 26);
 {
-  const water = new THREE.Mesh(new THREE.CircleGeometry(15, 22),
-    new THREE.MeshLambertMaterial({ color: C.water }));
+  const water = new THREE.Mesh(new THREE.CircleGeometry(15, 64),
+    new THREE.MeshPhysicalMaterial({ color: 0x347d86, roughness: .22, metalness: 0,
+      envMapIntensity: .85, clearcoat: .7, clearcoatRoughness: .18 }));
   water.rotation.x = -Math.PI / 2; water.position.y = .08; oasis.add(water);
   const palm = build(a => {
-    a(cyl(.28, .5, 9, 6), C.trunk, [0, 4.5, 0], [.06, 0, .1]);
-    for (let k = 0; k < 6; k++) {
-      const ang = k / 6 * 6.283;
-      a(box(4.6, .18, 1.1), C.palm, [Math.cos(ang) * 2.3, 9.1, Math.sin(ang) * 2.3], [0, -ang, -.34]);
+    a(tube([[0,0,0],[.12,3,.1],[.45,6,.2],[.8,9,.35]],
+      [[.46,.46],[.36,.36],[.29,.29],[.23,.23]], 10, 4), C.trunk);
+    for (let k = 0; k < 7; k++) {
+      const ang = k / 7 * 6.283, dx = Math.cos(ang), dz = Math.sin(ang);
+      const stem = [];
+      for (let j = 0; j <= 8; j++) {
+        const t = j / 8;
+        stem.push([.8 + dx * 4.5 * t, 9 + 2.1 * t - 3 * t * t, .35 + dz * 4.5 * t]);
+      }
+      a(tube(stem, [[.065,.045],[.04,.03],[.009,.009]], 6, 2), 0x657346);
+      for (let j = 1; j <= 7; j++) for (const side of [-1, 1]) {
+        const t = j / 8, reach = .9 * Math.sin(t * Math.PI) + .25;
+        const x = .8 + dx * 4.5 * t, z = .35 + dz * 4.5 * t;
+        const y = 9 + 2.1 * t - 3 * t * t;
+        a(tube([[x,y,z],[x-dz*side*reach*.5+dx*.15,y-.10,z+dx*side*reach*.5+dz*.15],
+          [x-dz*side*reach+dx*.4,y-.5,z+dx*side*reach+dz*.4]],
+          [[.025,.012],[.10,.012],[.002,.002]], 4, 2), j % 2 ? C.palm : 0x426847);
+      }
     }
-    a(sph(.5, 5, 4), 0xb8783c, [.4, 8.5, .3]);
+    a(sph(.32, 10, 8), 0x8b663e, [1.0, 8.7, .35]);
   });
   const palmIM = new THREE.InstancedMesh(palm, vcMat, 9);
   palmIM.frustumCulled = false;
@@ -704,33 +727,67 @@ scene.add(oasis);
 const horse = new THREE.Group();
 const rig = new THREE.Group(); horse.add(rig); scene.add(horse);
 
-const COAT = 0x5a3016, COAT_D = 0x3a1d0d, HAIR = 0x14100e, HOOF = 0x241d1a;
+const COAT = 0x75452b, COAT_D = 0x3a1d0d, HAIR = 0x14100e, HOOF = 0x241d1a;
 const horseMat = new THREE.MeshPhysicalMaterial({
   vertexColors: true, roughness: .58, metalness: 0, envMapIntensity: .65,
   sheen: .45, sheenRoughness: .7, sheenColor: new THREE.Color(0xc98f5e)
 });
 
+/* Coat variation is baked into vertices once, leaving tack and clothing untouched. */
+function horseSurface(g, yOffset = 0) {
+  const p = g.attributes.position, n = g.attributes.normal, c = g.attributes.color;
+  const base = new THREE.Color(COAT), dark = new THREE.Color(HAIR);
+  for (let i = 0; i < p.count; i++) {
+    if (Math.abs(c.getX(i) - base.r) > .00001 || Math.abs(c.getY(i) - base.g) > .00001 ||
+        Math.abs(c.getZ(i) - base.b) > .00001) continue;
+    const y = p.getY(i) + yOffset;
+    const belly = .76 + .24 * clamp((y - .85) / .8, 0, 1);
+    const dapple = .92 + .13 * vn(p.getX(i) * 18 + y * 3, p.getZ(i) * 14 + y * 8);
+    const tone = belly * dapple * (.94 + .06 * Math.max(0, n.getY(i)));
+    const sock = yOffset ? clamp((-p.getY(i) - .5) / .22, 0, 1) : 0;
+    c.setXYZ(i, lerp(base.r * tone, dark.r, sock), lerp(base.g * tone, dark.g, sock),
+      lerp(base.b * tone, dark.b, sock));
+  }
+  return g;
+}
+
 /* barrel, neck, head and rider — anatomical tubes, one merged draw call */
-const bodyMesh = new THREE.Mesh(build(a => {
-  a(tube([[0,1.30,-.85],[0,1.36,-.55],[0,1.34,-.2],[0,1.28,.2],[0,1.26,.55],[0,1.30,.85],[0,1.38,1.04]],
-    [[.20,.24],[.29,.33],[.30,.38],[.29,.38],[.28,.37],[.25,.33],[.19,.26]], 20, 3), COAT);
-  a(tube([[0,1.44,.94],[0,1.78,1.12],[0,2.06,1.26],[0,2.24,1.38]],
-    [[.19,.33],[.155,.27],[.12,.20],[.093,.135]], 16, 3), COAT);
+const bodyMesh = new THREE.Mesh(horseSurface(build(a => {
+  a(tube([[0,1.32,-1.0],[0,1.30,-.85],[0,1.36,-.55],[0,1.34,-.2],[0,1.28,.2],[0,1.26,.55],[0,1.30,.85],[0,1.38,1.10]],
+    [[.08,.15],[.23,.26],[.34,.34],[.36,.39],[.35,.40],[.33,.38],[.29,.34],[.13,.20]], 24, 4), COAT);
+  a(tube([[0,1.44,.78],[0,1.78,1.08],[0,2.06,1.26],[0,2.24,1.38]],
+    [[.21,.34],[.175,.28],[.13,.21],[.105,.14]], 20, 4), COAT);
   a(tube([[0,2.26,1.40],[0,2.17,1.56],[0,2.02,1.76],[0,1.95,1.87]],
-    [[.09,.13],[.093,.14],[.068,.096],[.05,.068]], 14, 3), COAT);
-  a(sph(.095, 14, 12), COAT_D, [0, 2.16, 1.55], [0, 0, 0], [1, 1.15, 1.2]);
-  a(sph(.055, 12, 10), 0x2e1d12, [0, 1.94, 1.9], [0, 0, 0], [1, .95, 1.15]);
+    [[.105,.145],[.115,.16],[.082,.11],[.074,.08]], 18, 4), COAT);
+  a(sph(.10, 16, 12), COAT, [0, 2.12, 1.53], [0, 0, 0], [1.05, 1.15, 1.2]);
+  a(sph(.075, 16, 10), 0x443329, [0, 1.94, 1.9], [0, 0, 0], [1, .85, 1.2]);
   a(tube([[0,2.29,1.42],[0,2.14,1.62],[0,1.99,1.82]], [[.024,.013],[.03,.013],[.018,.013]], 8, 2), 0xe8e0d4);
   for (const s2 of [-1, 1]) {
-    a(cone(.036, .14, 8), COAT_D, [s2 * .06, 2.38, 1.35], [-.25, 0, 0]);
-    a(sph(.025, 10, 8), 0x120c0a, [s2 * .085, 2.19, 1.58]);
-    a(sph(.018, 8, 6), 0x160e0b, [s2 * .032, 1.95, 1.93]);
-    a(sph(.135, 14, 12), COAT, [s2 * .175, 1.12, .70], [0, 0, 0], [.5, 1.3, 1.45]);
-    a(sph(.185, 14, 12), COAT, [s2 * .193, 1.20, -.50], [0, 0, 0], [.5, 1.3, 1.45]);
+    a(tube([[s2*.065,2.32,1.35],[s2*.085,2.43,1.32],[s2*.10,2.51,1.34]],
+      [[.042,.028],[.030,.018],[.004,.004]], 10, 3), COAT);
+    a(sph(.024, 10, 8), 0x261711, [s2 * .085, 2.43, 1.34], [0, 0, 0], [1, 2.2, .35]);
+    a(sph(.032, 12, 8), COAT_D, [s2 * .105, 2.20, 1.56], [0, 0, 0], [.6, 1, 1.2]);
+    a(sph(.022, 12, 8), 0x120c0a, [s2 * .12, 2.20, 1.57]);
+    a(sph(.006, 6, 4), 0xe9d8b8, [s2 * .137, 2.206, 1.579]);
+    a(sph(.025, 10, 8), 0x160e0b, [s2 * .06, 1.96, 1.94], [0, s2 * .4, -.2], [.4, 1, 1.3]);
+    a(sph(.18, 18, 12), COAT, [s2 * .20, 1.18, .70], [0, 0, s2 * .12], [.65, 1.5, 1.45]);
+    a(sph(.23, 18, 12), COAT, [s2 * .20, 1.24, -.57], [0, 0, 0], [.72, 1.3, 1.35]);
+    /* cheek strap, reins, stirrup leather and boot, all in the same mesh */
+    a(tube([[s2*.10,2.30,1.40],[s2*.13,2.14,1.62],[s2*.078,1.98,1.85]],
+      [[.012,.012],[.012,.012],[.012,.012]], 6, 3), 0x332116);
+    a(tube([[s2*.078,1.98,1.85],[s2*.20,1.82,1.05],[s2*.17,2.0,.3]],
+      [[.008,.008],[.008,.008],[.008,.008]], 6, 5), 0x49311e);
+    a(tube([[s2*.28,1.69,.12],[s2*.38,1.43,.16],[s2*.36,1.25,.18]],
+      [[.022,.012],[.022,.012],[.022,.012]], 6, 3), 0x402a1b);
+    a(tube([[s2*.36,1.35,.13],[s2*.40,1.23,.19],[s2*.33,1.22,.28],[s2*.32,1.35,.27]],
+      [[.012,.012],[.012,.012],[.012,.012],[.012,.012]], 6, 2), 0x958777);
+    a(tube([[s2*.28,1.53,.16],[s2*.32,1.34,.18],[s2*.33,1.29,.28]],
+      [[.047,.045],[.045,.04],[.045,.065]], 10, 3), 0x30251f);
   }
   /* saddle, blanket and rider */
-  a(box(.86, .07, .88), 0xc9a06b, [0, 1.62, .05]);
-  a(tube([[-.30,1.66,.1],[0,1.72,.05],[.30,1.66,.1]], [[.06,.05],[.16,.09],[.06,.05]], 10, 3), 0x4a2a18);
+  a(tube([[-.37,1.29,.05],[-.31,1.59,.05],[0,1.76,.05],[.31,1.59,.05],[.37,1.29,.05]],
+    [[.40,.025],[.44,.028],[.44,.035],[.44,.028],[.40,.025]], 12, 3), 0x9b6941);
+  a(tube([[-.30,1.72,.1],[0,1.79,.05],[.30,1.72,.1]], [[.06,.05],[.16,.09],[.06,.05]], 10, 3), 0x4a2a18);
   a(box(.1, .34, .1), 0x33251c, [.3, 1.45, .1]);
   a(box(.1, .34, .1), 0x33251c, [-.3, 1.45, .1]);
   a(tube([[0,1.72,-.05],[0,2.05,-.1],[0,2.3,-.06]], [[.13,.11],[.15,.13],[.12,.1]], 12, 3), 0x2c3f6b);
@@ -741,7 +798,7 @@ const bodyMesh = new THREE.Mesh(build(a => {
   a(tube([[-.14,2.28,-.02],[-.2,2.12,.16],[-.17,2.0,.3]], [[.055,.055],[.045,.045],[.035,.035]], 8, 2), 0x2c3f6b);
   a(tube([[.12,1.9,-.02],[.22,1.72,.12],[.28,1.5,.16]], [[.07,.07],[.06,.06],[.045,.045]], 8, 2), 0x1e2a5e);
   a(tube([[-.12,1.9,-.02],[-.22,1.72,.12],[-.28,1.5,.16]], [[.07,.07],[.06,.06],[.045,.045]], 8, 2), 0x1e2a5e);
-}), horseMat);
+})), horseMat);
 bodyMesh.castShadow = true; rig.add(bodyMesh);
 
 /* mane, tail and the rider's scarf — the parts that move with speed */
@@ -749,8 +806,8 @@ const hairMesh = new THREE.Mesh(build(a => {
   const r = rng(5);
   a(tube([[0,1.42,-.87],[0,1.3,-1.0],[0,1.14,-1.08]], [[.07,.07],[.055,.055],[.04,.04]], 8, 2), HAIR);
   for (let i = 0; i < 26; i++) {
-    const ang = (r() - .5) * .5, len = .5 + r() * .4, sx = Math.sin(ang) * .085, dz = -1.09 - r() * .07;
-    a(tube([[sx,1.12,dz],[sx*1.4,1.12-len*.5,dz-.05],[sx*1.6,1.1-len,dz-.02]],
+    const ang = (r() - .5) * 1.2, len = .5 + r() * .4, sx = Math.sin(ang) * .14, dz = -1.09 - r() * .07;
+    a(tube([[sx*.3,1.22,-1.06],[sx,1.12-len*.5,dz-.05],[sx*1.1,1.1-len,dz-.02]],
       [[.018,.018],[.013,.013],[.005,.005]], 4, 2), HAIR);
   }
   for (let i = 0; i < 22; i++) {
@@ -763,6 +820,21 @@ const hairMesh = new THREE.Mesh(build(a => {
   a(tube([[0,2.3,-.12],[-.05,2.18,-.5],[.03,2.0,-.85]], [[.05,.05],[.06,.05],[.03,.03]], 6, 2), C.sun);
 }), horseMat);
 hairMesh.castShadow = true; rig.add(hairMesh);
+/* A single baked morph bends free ends; roots no longer rotate away from the body. */
+{
+  const g = hairMesh.geometry, p = g.attributes.position, bend = new Float32Array(p.count * 3);
+  for (let i = 0; i < p.count; i++) {
+    const x = p.getX(i), y = p.getY(i), z = p.getZ(i);
+    const tail = z < -.85 && y < 1.42 ? clamp((1.35 - y) / .95, 0, 1) : 0;
+    const mane = z > .8 && y > 1.4 ? clamp((x - .028) / .06, 0, 1) : 0;
+    const scarf = z < -.13 && y > 1.7 ? clamp((-z - .13) / .72, 0, 1) : 0;
+    bend[i * 3] = tail * .16 + mane * .06 + scarf * .12;
+    bend[i * 3 + 1] = tail * .18 + scarf * .07;
+    bend[i * 3 + 2] = -tail * .40 - mane * .08 - scarf * .12;
+  }
+  g.morphAttributes.position = [new THREE.BufferAttribute(bend, 3)];
+  g.morphTargetsRelative = true; hairMesh.updateMorphTargets(); g.computeBoundingSphere();
+}
 
 /* legs pivot at the shoulder and hip so the gait can drive them */
 function legGeoFor(front) {
@@ -772,11 +844,12 @@ function legGeoFor(front) {
   const rad = front
     ? [[.095,.105],[.072,.078],[.044,.048],[.032,.035],[.038,.038]]
     : [[.13,.16],[.09,.105],[.048,.053],[.032,.035],[.038,.038]];
-  return build(a => {
+  return horseSurface(build(a => {
     a(tube(pts, rad, 12, 3), COAT);
-    a(tube(pts.slice(-3), rad.slice(-3), 10, 3), HAIR);
-    a(cyl(.058, .05, .09, 12), HOOF, [pts[4][0], pts[4][1] - .04, pts[4][2]]);
-  });
+    a(sph(.044, 10, 8), HAIR, pts[3], [0, 0, 0], [1, 1.3, 1.15]);
+    a(sph(.071, 12, 8), HOOF, [pts[4][0], pts[4][1] - .035, pts[4][2] + .025],
+      [0, 0, 0], [.88, .65, 1.3]);
+  }), front ? 1.14 : 1.24);
 }
 const legGeoF = legGeoFor(true), legGeoB = legGeoFor(false);
 const LEGP = [[.19, .76, 1.14], [-.19, .76, 1.14], [.21, -.54, 1.24], [-.21, -.54, 1.24]];
@@ -988,6 +1061,12 @@ function spawnSegment(i) {
     add(dunes, { x: sgn * (CFG.half + 16 + r() * 60), z: z0 + r() * CFG.seg,
       sx: s, sy: s * (.5 + r() * .5), sz: s * (.8 + r() * .8), ry: r() * 6.283 });
   }
+  /* Distant ridges reuse the same capped pool and stay outside the riding corridor. */
+  for (const sgn of [-1, 1]) {
+    const s = 65 + r() * 25;
+    add(dunes, { x: sgn * (190 + r() * 30), z: z0 + r() * CFG.seg,
+      sx: s, sy: s * (.55 + r() * .25), sz: s * 1.15, ry: r() * 6.283 });
+  }
 }
 const allPools = () => [...pillars, boulders, gullies, shrubs, stones, bones, dunes, grit, tufts, clouds];
 function updateWorld() {
@@ -1139,8 +1218,8 @@ function render(alpha, dt) {
   rig.rotation.z = damp(rig.rotation.z, -H.vx * .022, 9, dt);
   rig.rotation.y = damp(rig.rotation.y, H.vx * .02, 9, dt);
   rig.rotation.x = damp(rig.rotation.x, clamp(-H.vy * .02, -.18, .18), 9, dt);
-  hairMesh.rotation.y = Math.sin(H.phase * .5) * .1;
-  hairMesh.rotation.x = -clamp(H.spd / 60, 0, .3);
+  hairMesh.morphTargetInfluences[0] = clamp(H.spd / CFG.spdSprint, 0, 1) *
+    (.7 + Math.sin(H.phase * .5) * .3);
 
   camPos.x = damp(camPos.x, hx * .85 + 1.8, 4.5, dt);
   camPos.y = damp(camPos.y, hy + 2.9 * view.dist, 5, dt);
